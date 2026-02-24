@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お問い合わせ | 学習ツール室</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink: #1a1f2e;
+            --ink-light: #5a607a;
+            --paper: #f6f5f0;
+            --accent: #7c6fa0;
+            --accent-dark: #5c4f7c;
+            --accent-light: #ede9f5;
+            --accent2: #c9815a;
+            --green: #5a8a72;
+            --green-light: #e4f0ea;
+            --line: #e4e2da;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        .topbar {
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 50%, var(--green) 100%);
+        }
+
+        .header-wrap {
+            border-bottom: 1px solid var(--line);
+            padding: 48px 40px 40px;
+        }
+
+        header {
+            max-width: 880px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            color: var(--accent);
+            text-decoration: none;
+            margin-bottom: 28px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            border-bottom: 1px solid var(--accent-light);
+            padding-bottom: 1px;
+            transition: border-color 0.2s;
+        }
+
+        .back-link:hover { border-color: var(--accent); }
+
+        .site-label {
+            font-size: 11px;
+            letter-spacing: 0.22em;
+            color: var(--accent);
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .site-label::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            color: var(--ink);
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        h1 em { font-style: italic; color: var(--accent); }
+
+        main {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 52px 40px 80px;
+        }
+
+        /* カード */
+        .contact-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 44px 48px;
+            max-width: 580px;
+        }
+
+        .card-desc {
+            font-size: 0.88rem;
+            color: var(--ink-light);
+            line-height: 1.85;
+            margin-bottom: 32px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .card-desc strong { color: var(--ink); font-weight: 500; }
+
+        /* フォーム */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--ink);
+            margin-bottom: 8px;
+            letter-spacing: 0.04em;
+        }
+
+        label .required {
+            color: var(--accent2);
+            font-size: 0.75rem;
+            margin-left: 6px;
+            font-weight: 400;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.9rem;
+            color: var(--ink);
+            background: var(--paper);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
+            background: var(--white);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 140px;
+            line-height: 1.7;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a607a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+
+        /* 送信ボタン */
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.08em;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+            margin-top: 8px;
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(92, 79, 124, 0.25);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* 注意書き */
+        .caution-box {
+            background: #fdf8f5;
+            border: 1px solid #eaddd5;
+            border-left: 3px solid var(--accent2);
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-size: 0.83rem;
+            color: var(--ink-light);
+            line-height: 1.7;
+            margin-top: 28px;
+        }
+
+        .caution-box ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 8px;
+        }
+
+        .caution-box li::before {
+            content: '・';
+            color: var(--accent2);
+        }
+
+        /* 送信完了メッセージ */
+        .success-msg {
+            display: none;
+            background: var(--green-light);
+            border: 1px solid var(--green);
+            border-radius: 10px;
+            padding: 28px 32px;
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .success-msg .icon { font-size: 2rem; margin-bottom: 12px; }
+        .success-msg h3 { color: var(--green); font-size: 1rem; margin-bottom: 8px; }
+        .success-msg p { font-size: 0.875rem; color: var(--ink-light); line-height: 1.7; }
+
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 28px 40px;
+            text-align: center;
+            font-size: 11.5px;
+            color: var(--ink-light);
+            letter-spacing: 0.06em;
+        }
+
+        @media (max-width: 640px) {
+            .header-wrap, main { padding-left: 20px; padding-right: 20px; }
+            .header-wrap { padding-top: 36px; padding-bottom: 32px; }
+            .contact-card { padding: 28px 22px; }
+            main { padding-top: 36px; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-wrap  { animation: fadeUp 0.4s 0.05s ease both; }
+        .contact-card { animation: fadeUp 0.4s 0.15s ease both; }
+    </style>
+</head>
+<body>
+
+    <div class="topbar"></div>
+
+    <div class="header-wrap">
+        <header>
+            <a href="index.html" class="back-link">← ホームに戻る</a>
+            <p class="site-label">Contact</p>
+            <h1><em>お問い合わせ</em></h1>
+        </header>
+    </div>
+
+    <main>
+        <div class="contact-card">
+
+            <p class="card-desc">
+                このサイトは<strong>個人が作成・運営</strong>しています。<br>
+                ツールの内容に関するご意見・誤りのご指摘など、お気軽にどうぞ。<br>
+                個人運営のため、返信にお時間をいただく場合があります。
+            </p>
+
+            <!-- ★ Formspree のフォームID をここに設定 -->
+            <!-- action="https://formspree.io/f/★YOUR_FORM_ID★" を変更してください -->
+            <form
+                id="contact-form"
+                action="https://formspree.io/f/★YOUR_FORM_ID★"
+                method="POST"
+            >
+                <div class="form-group">
+                    <label for="category">お問い合わせの種類<span class="required">必須</span></label>
+                    <select id="category" name="category" required>
+                        <option value="" disabled selected>選択してください</option>
+                        <option value="誤りの指摘">ツールの内容の誤り・修正のご指摘</option>
+                        <option value="ご意見・ご要望">ご意見・ご要望</option>
+                        <option value="転載・利用の相談">転載・商用利用のご相談</option>
+                        <option value="その他">その他</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="name">お名前（ニックネーム可）<span class="required">必須</span></label>
+                    <input type="text" id="name" name="name" placeholder="例：田中 / tanaka" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">返信先メールアドレス<span class="required">必須</span></label>
+                    <input type="email" id="email" name="email" placeholder="例：your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">お問い合わせ内容<span class="required">必須</span></label>
+                    <textarea id="message" name="message" placeholder="お問い合わせ内容をご記入ください。" required></textarea>
+                </div>
+
+                <!-- スパム対策（honeypot） -->
+                <input type="text" name="_gotcha" style="display:none">
+
+                <button type="submit" class="submit-btn">送信する</button>
+            </form>
+
+            <!-- 送信完了メッセージ -->
+            <div class="success-msg" id="success-msg">
+                <div class="icon">✅</div>
+                <h3>送信が完了しました</h3>
+                <p>お問い合わせいただきありがとうございます。<br>内容を確認の上、返信いたします。</p>
+            </div>
+
+            <div class="caution-box">
+                <strong>⚠️ ご注意</strong>
+                <ul>
+                    <li>個人運営のため、返信にお時間をいただく場合があります</li>
+                    <li>ツールの無断転載・無断複製はご遠慮ください</li>
+                    <li>商用利用についてはお問い合わせからご相談ください</li>
+                </ul>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        © 2025 学習ツール室 ― Middle School Worksheet Studio
+    </footer>
+
+    <script>
+        // 送信後に完了メッセージを表示
+        const form = document.getElementById('contact-form');
+        form.addEventListener('submit', function(e) {
+            const data = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            }).then(res => {
+                if (res.ok) {
+                    form.style.display = 'none';
+                    document.getElementById('success-msg').style.display = 'block';
+                } else {
+                    alert('送信に失敗しました。時間をおいて再度お試しください。');
+                }
+            }).catch(() => {
+                alert('送信に失敗しました。ネットワーク接続をご確認ください。');
+            });
+            e.preventDefault();
+        });
+    </script>
+
+</body>
+</html>

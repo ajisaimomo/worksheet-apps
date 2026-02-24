@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学習ツール室</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --ink: #1a1f2e;
+            --ink-light: #5a607a;
+            --paper: #f6f5f0;
+            --accent: #7c6fa0;
+            --accent-dark: #5c4f7c;
+            --accent-light: #ede9f5;
+            --accent2: #c9815a;
+            --accent2-light: #f5ebe4;
+            --green: #5a8a72;
+            --green-light: #e4f0ea;
+            --line: #e4e2da;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        .topbar {
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 50%, var(--green) 100%);
+        }
+
+        header {
+            padding: 56px 40px 48px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .header-inner {
+            max-width: 880px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .site-label {
+            font-size: 11px;
+            letter-spacing: 0.22em;
+            color: var(--accent);
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .site-label::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(1.9rem, 5vw, 3rem);
+            color: var(--ink);
+            line-height: 1.15;
+            margin-bottom: 6px;
+            letter-spacing: -0.01em;
+        }
+
+        h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .h1-sub {
+            font-size: 0.8rem;
+            color: var(--ink-light);
+            font-weight: 300;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+        }
+
+        .intro {
+            font-size: 0.9rem;
+            color: var(--ink-light);
+            max-width: 480px;
+            line-height: 1.85;
+        }
+
+        .badge {
+            background: var(--accent-light);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 14px 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .badge-num {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.4rem;
+            color: var(--accent-dark);
+            line-height: 1;
+        }
+
+        .badge-label {
+            font-size: 11px;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+            margin-top: 4px;
+        }
+
+        main {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 52px 40px 80px;
+        }
+
+        /* 個人サイト表記 */
+        .personal-notice {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-left: 3px solid var(--ink-light);
+            border-radius: 8px;
+            padding: 14px 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            font-size: 0.845rem;
+            color: var(--ink-light);
+            line-height: 1.6;
+            flex-wrap: wrap;
+        }
+
+        .personal-notice strong { color: var(--ink); font-weight: 500; }
+
+        .contact-link {
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            white-space: nowrap;
+            border-bottom: 1px solid var(--accent-light);
+            padding-bottom: 1px;
+            transition: border-color 0.2s;
+        }
+
+        .contact-link:hover { border-color: var(--accent); }
+
+        /* 印刷注意 */
+        .print-notice {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-left: 3px solid var(--accent2);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.875rem;
+            color: var(--ink-light);
+            line-height: 1.7;
+        }
+
+        .notice-icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .notice-text strong {
+            color: var(--ink);
+            font-weight: 500;
+        }
+
+        /* 使い方 */
+        .how-section {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 48px;
+            display: flex;
+            gap: 28px;
+            align-items: flex-start;
+        }
+
+        .how-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--accent-light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .how-title {
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .how-steps {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .how-steps li {
+            font-size: 0.88rem;
+            color: var(--ink-light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .step-num {
+            background: var(--accent);
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* アプリ一覧 */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        .section-line {
+            flex-grow: 1;
+            height: 1px;
+            background: var(--line);
+        }
+
+        .section-count {
+            font-size: 11px;
+            color: var(--ink-light);
+            letter-spacing: 0.08em;
+            white-space: nowrap;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+            gap: 16px;
+        }
+
+        /* アプリカード */
+        .app-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 26px 24px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            opacity: 0;
+            transition: opacity 0.22s ease;
+        }
+
+        .app-card.violet::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+        .app-card.terracotta::before { background: linear-gradient(90deg, var(--accent2), #e8a87c); }
+        .app-card.sage::before { background: linear-gradient(90deg, var(--green), #8bbfa3); }
+
+        .app-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 32px rgba(26,31,46,0.12);
+        }
+
+        .app-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10.5px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            border-radius: 4px;
+            padding: 4px 10px;
+            width: fit-content;
+        }
+
+        .tag-violet     { color: var(--accent-dark); background: var(--accent-light); }
+        .tag-terracotta { color: #9a4e25; background: var(--accent2-light); }
+        .tag-sage       { color: #2d6650; background: var(--green-light); }
+
+        .card-title {
+            font-size: 0.97rem;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.45;
+        }
+
+        .card-desc {
+            font-size: 0.845rem;
+            color: var(--ink-light);
+            line-height: 1.75;
+            flex-grow: 1;
+        }
+
+        .card-arrow {
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 6px;
+        }
+
+        .app-card.violet .card-arrow     { color: var(--accent); }
+        .app-card.terracotta .card-arrow { color: var(--accent2); }
+        .app-card.sage .card-arrow       { color: var(--green); }
+
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 28px 40px;
+            text-align: center;
+            font-size: 11.5px;
+            color: var(--ink-light);
+            letter-spacing: 0.06em;
+        }
+
+        @media (max-width: 640px) {
+            header, main { padding-left: 20px; padding-right: 20px; }
+            header { padding-top: 40px; padding-bottom: 36px; }
+            .header-inner { grid-template-columns: 1fr; }
+            .badge { display: none; }
+            .how-section { flex-direction: column; gap: 16px; padding: 22px 20px; }
+            .apps-grid { grid-template-columns: 1fr; }
+            main { padding-top: 40px; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .topbar       { animation: fadeUp 0.3s ease both; }
+        header        { animation: fadeUp 0.4s 0.05s ease both; }
+        .print-notice { animation: fadeUp 0.4s 0.10s ease both; }
+        .how-section  { animation: fadeUp 0.4s 0.15s ease both; }
+        .apps-grid    { animation: fadeUp 0.4s 0.20s ease both; }
+    </style>
+</head>
+<body>
+
+    <div class="topbar"></div>
+
+    <header>
+        <div class="header-inner">
+            <div>
+                <p class="site-label">Learning Tools</p>
+                <h1><em>学習ツール室</em></h1>
+                <p class="h1-sub">Middle School Worksheet Studio</p>
+                <p class="intro">
+                    中学生向けの学習プリント・練習ツールをまとめています。<br>
+                    授業の予習・復習や、自主学習にお役立てください。
+                </p>
+            </div>
+            <div class="badge">
+                <div class="badge-num">3</div>
+                <div class="badge-label">TOOLS</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <div class="personal-notice">
+            <span>⚠️ このサイトは個人が作成した学習ツールの置き場です。個人使用は自由ですが、<strong>無断転載・無断複製はご遠慮ください。</strong></span>
+            <a href="contact.html" class="contact-link">お問い合わせ →</a>
+        </div>
+
+        <div class="print-notice">
+            <span class="notice-icon">🖨️</span>
+            <span class="notice-text">
+                <strong>印刷について：</strong>
+                印刷ボタンが機能しない場合があります。その際はブラウザ（Chrome推奨）の印刷機能からご利用ください。
+            </span>
+        </div>
+
+        <div class="how-section">
+            <div class="how-icon">💡</div>
+            <div>
+                <p class="how-title">使い方</p>
+                <ul class="how-steps">
+                    <li><span class="step-num">1</span>下の一覧から使いたいツールを選んでクリック</li>
+                    <li><span class="step-num">2</span>ツール上で問題を設定・プリント作成</li>
+                    <li><span class="step-num">3</span>画面を印刷するか、そのまま画面上で練習</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <span class="section-title">🗂 ツール一覧</span>
+            <div class="section-line"></div>
+            <span class="section-count">3 TOOLS</span>
+        </div>
+
+        <div class="apps-grid">
+
+            <a class="app-card violet" href="taigigo/index.html">
+                <span class="card-tag tag-violet">📝 語彙・言語</span>
+                <p class="card-title">対義語プリント作成ツール</p>
+                <p class="card-desc">中学生向けの対義語を一覧から選んでプリントを作成。問題数や出題範囲をカスタマイズして印刷できます。</p>
+                <span class="card-arrow">開く →</span>
+            </a>
+
+            <a class="app-card terracotta" href="reading1/index.html">
+                <span class="card-tag tag-terracotta">📖 読解・国語</span>
+                <p class="card-title">精読プリント<br>主題と構造を読み取る</p>
+                <p class="card-desc">中学1年生向けの精読プリント。文章の主題と構造を読み解く力を養います。</p>
+                <span class="card-arrow">開く →</span>
+            </a>
+
+            <a class="app-card sage" href="reading2/index.html">
+                <span class="card-tag tag-sage">📖 読解・国語</span>
+                <p class="card-title">精読プリント②<br>主題と構造を読み取る</p>
+                <p class="card-desc">中学1年生向けの精読プリント第2弾。読解力・記述力をさらに深めます。</p>
+                <span class="card-arrow">開く →</span>
+            </a>
+
+        </div>
+
+    </main>
+
+    <footer>
+        © 2025 学習ツール室 ― Middle School Worksheet Studio<br>
+        <span style="font-size:11px; opacity:0.7;">最終更新：2025年6月</span>
+    </footer>
+
+</body>
+</html>
