@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>パソコンのしくみ</title>
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;700&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    background: #fff;
+    color: #333;
+    width: 210mm;
+    margin: 0 auto;
+    padding: 8mm 10mm;
+    font-size: 11px;
+  }
+
+  /* ===== TITLE ===== */
+  .title-block {
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF9E40 100%);
+    border-radius: 18px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+  }
+  .title-block h1 {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 26px;
+    color: #fff;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+    line-height: 1.1;
+  }
+  .title-block p {
+    color: rgba(255,255,255,0.9);
+    font-size: 11px;
+    margin-top: 2px;
+  }
+  .title-icon { font-size: 40px; flex-shrink: 0; }
+
+  /* ===== SECTION HEADERS ===== */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0 5px;
+  }
+  .section-tag {
+    padding: 4px 14px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+  .tag-orange { background: #FF7043; }
+  .tag-teal   { background: #26A69A; }
+  .tag-purple { background: #7C6FD4; }
+  .tag-green  { background: #43A047; }
+  .section-line { flex: 1; height: 2px; border-radius: 2px; }
+  .line-orange { background: linear-gradient(to right, #FF7043, transparent); }
+  .line-teal   { background: linear-gradient(to right, #26A69A, transparent); }
+  .line-purple { background: linear-gradient(to right, #7C6FD4, transparent); }
+  .line-green  { background: linear-gradient(to right, #43A047, transparent); }
+
+  /* ===== CARDS GRID ===== */
+  .cards-row {
+    display: grid;
+    gap: 7px;
+  }
+  .cards-5 { grid-template-columns: repeat(5, 1fr); }
+  .cards-4 { grid-template-columns: repeat(4, 1fr); }
+  .cards-3 { grid-template-columns: repeat(3, 1fr); }
+  .cards-2 { grid-template-columns: 1fr 1fr; }
+
+  .hw-card {
+    border-radius: 14px;
+    padding: 8px 6px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .hw-card .icon-wrap {
+    width: 54px; height: 54px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+  .hw-card .icon-wrap svg { width: 34px; height: 34px; }
+  .hw-card .card-label {
+    font-weight: 800;
+    font-size: 12px;
+    color: #fff;
+    background: rgba(0,0,0,0.18);
+    border-radius: 8px;
+    padding: 2px 8px;
+    width: 100%;
+  }
+  .hw-card .card-desc {
+    font-size: 9px;
+    color: rgba(255,255,255,0.95);
+    line-height: 1.3;
+  }
+  .bg-orange { background: #FF7043; }
+  .bg-amber  { background: #FFA726; }
+  .bg-teal   { background: #26A69A; }
+  .bg-blue   { background: #42A5F5; }
+  .bg-indigo { background: #5C6BC0; }
+  .bg-purple { background: #AB47BC; }
+  .bg-green  { background: #66BB6A; }
+  .bg-pink   { background: #EC407A; }
+
+  /* ===== BODY ANALOGY ===== */
+  .analogy-box {
+    background: #F3F0FF;
+    border-radius: 16px;
+    padding: 7px 12px;
+    display: grid;
+    grid-template-columns: 1fr 48px 1fr;
+    gap: 8px;
+    align-items: center;
+    margin: 5px 0;
+    border: 2px solid #D1C4E9;
+  }
+  .analogy-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    text-align: center;
+  }
+  .analogy-col svg { width: 58px; height: 72px; }
+  .analogy-label {
+    background: #7C6FD4;
+    color: #fff;
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-weight: 800;
+    font-size: 12px;
+  }
+  .analogy-desc { font-size: 9.5px; color: #555; line-height: 1.4; }
+  .analogy-vs {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #9E9E9E;
+    text-align: center;
+  }
+
+  /* ===== OS/SOFTWARE SECTION ===== */
+  .sw-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 6px 0;
+  }
+  .sw-card {
+    border-radius: 14px;
+    padding: 9px 10px;
+    border: 2.5px solid;
+  }
+  .sw-card.os { background: #E3F2FD; border-color: #42A5F5; }
+  .sw-card.app { background: #E8F5E9; border-color: #66BB6A; }
+  .sw-card .sw-title {
+    font-weight: 800;
+    font-size: 13px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .sw-card.os .sw-title { color: #1565C0; }
+  .sw-card.app .sw-title { color: #2E7D32; }
+  .sw-card .sw-sub { font-size: 9.5px; color: #555; margin-bottom: 6px; line-height: 1.4; }
+  .examples-row {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .ex-chip {
+    border-radius: 8px;
+    padding: 3px 8px;
+    font-size: 9px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .os-chip { background: #BBDEFB; color: #0D47A1; }
+  .app-chip { background: #C8E6C9; color: #1B5E20; }
+
+  /* ===== CPU/MEMORY TABLE ===== */
+  .parts-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 6px 0;
+    font-size: 10px;
+  }
+  .parts-table th {
+    background: #26A69A;
+    color: #fff;
+    padding: 5px 8px;
+    font-weight: 800;
+    text-align: center;
+    font-size: 10px;
+  }
+  .parts-table th:first-child { border-radius: 12px 0 0 0; }
+  .parts-table th:last-child { border-radius: 0 12px 0 0; }
+  .parts-table td {
+    padding: 5px 8px;
+    border-bottom: 1px solid #E0E0E0;
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+  .parts-table tr:nth-child(even) td { background: #E0F2F1; }
+  .parts-table tr:nth-child(odd) td { background: #fff; }
+  .parts-table tr:last-child td:first-child { border-radius: 0 0 0 12px; }
+  .parts-table tr:last-child td:last-child { border-radius: 0 0 12px 0; }
+  .parts-table td:first-child { font-weight: 800; text-align: center; }
+  .part-name { font-size: 12px; }
+  .part-icon { font-size: 16px; display: block; }
+
+  /* ===== RESTAURANT ANALOGY ===== */
+  .restaurant-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin: 6px 0;
+  }
+  .rest-card {
+    border-radius: 12px;
+    text-align: center;
+    padding: 8px 6px;
+    border: 2px solid;
+  }
+  .rest-card.cpu { background: #FFF3E0; border-color: #FFA726; }
+  .rest-card.mem { background: #E3F2FD; border-color: #42A5F5; }
+  .rest-card.sto { background: #F3E5F5; border-color: #AB47BC; }
+  .rest-icon { font-size: 26px; margin-bottom: 3px; }
+  .rest-name { font-weight: 800; font-size: 11px; margin-bottom: 2px; }
+  .rest-arrow { font-size: 9px; color: #999; margin: 2px 0; }
+  .rest-analogy { font-size: 10px; font-weight: 700; margin-bottom: 3px; }
+  .rest-desc { font-size: 9px; color: #666; line-height: 1.35; }
+
+  /* ===== CONFIRM BOX ===== */
+  .confirm-box {
+    background: #FFFDE7;
+    border: 2px solid #FDD835;
+    border-radius: 14px;
+    padding: 9px 12px;
+    margin-top: 8px;
+  }
+  .confirm-box h3 {
+    font-size: 14px;
+    font-weight: 800;
+    color: #F57F17;
+    margin-bottom: 8px;
+  }
+  .q-row {
+    margin-bottom: 8px;
+  }
+  .q-text { font-size: 12px; font-weight: 700; color: #333; margin-bottom: 4px; }
+  .q-line {
+    border: none;
+    border-bottom: 1.5px solid #BDBDBD;
+    width: 100%;
+    display: block;
+    margin: 5px 0;
+    height: 26px;
+  }
+
+  /* ===== SPEECH BUBBLE ===== */
+  .bubble-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    background: #FFF8E1;
+    border-radius: 12px;
+    padding: 7px 10px;
+    margin: 6px 0;
+    border: 2px solid #FFE082;
+  }
+  .bubble-text { font-size: 10px; line-height: 1.5; color: #5D4037; }
+  .bubble-emoji { font-size: 22px; flex-shrink: 0; }
+
+  /* ===== PARTS PANEL (manga-style grid) ===== */
+  .parts-panel {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 3px solid #555;
+    margin: 8px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    position: relative;
+  }
+  .panel-cell {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+    border: 2px solid #555;
+  }
+  .panel-cell svg { filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.18)); }
+  .panel-cell .part-label {
+    font-weight: 800;
+    font-size: 11px;
+    text-align: center;
+    color: #333;
+  }
+  .panel-cell .part-sub { font-size: 9px; color: #666; text-align: center; line-height: 1.3; }
+  .panel-bg-yellow { background: #FFF9C4; }
+  .panel-bg-teal   { background: #E0F7FA; }
+  .panel-bg-orange { background: #FBE9E7; }
+  .panel-bg-green  { background: #E8F5E9; }
+  .panel-center-bubble {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: flex;
+    gap: 6px;
+    pointer-events: none;
+  }
+  .speech-oval {
+    background: #fff;
+    border: 2.5px solid #FF7043;
+    border-radius: 50px;
+    padding: 5px 10px;
+    font-size: 10px;
+    font-weight: 800;
+    color: #BF360C;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    line-height: 1.35;
+    text-align: center;
+  }
+
+  /* ===== DEVICE SAME SECTION ===== */
+  .device-section {
+    background: linear-gradient(135deg, #E0F7FA 0%, #E8F5E9 100%);
+    border-radius: 16px;
+    padding: 10px 14px;
+    margin: 8px 0;
+    border: 2px solid #80CBC4;
+  }
+  .device-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .device-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 8px 6px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 2px solid #B2DFDB;
+  }
+  .device-card svg { width: 56px; height: 44px; }
+  .device-name { font-weight: 800; font-size: 11px; color: #00695C; margin: 4px 0 2px; }
+  .device-chips {
+    display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; margin-top: 4px;
+  }
+  .d-chip {
+    background: #E0F2F1; color: #00695C;
+    border-radius: 6px; padding: 2px 5px;
+    font-size: 8.5px; font-weight: 700;
+  }
+  .device-bubble {
+    background: #fff;
+    border: 2.5px solid #26A69A;
+    border-radius: 50px;
+    padding: 5px 16px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #00695C;
+    display: inline-block;
+    margin-bottom: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  @media print {
+    body { margin: 0; padding: 6mm 8mm; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    @page { size: A4; margin: 0; }
+
+    /* 途中で切れないようにする要素 */
+    .title-block,
+    .section-header,
+    .analogy-box,
+    .sw-grid,
+    .sw-card,
+    .cards-row,
+    .hw-card,
+    .parts-panel,
+    .panel-cell,
+    .device-section,
+    .device-row,
+    .device-card,
+    .restaurant-row,
+    .rest-card,
+    .bubble-wrap,
+    .confirm-box,
+    .q-row {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    /* セクション単位でなるべくまとめる */
+    .section-header + *,
+    .section-header {
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+
+    /* 厨房SVGと3原因カードはセットで */
+    .section-header + div {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- TITLE -->
+<div class="title-block">
+  <div class="title-icon">💻</div>
+  <div>
+    <h1>パソコンのしくみ</h1>
+    <p>ハードウェア・ソフトウェア・OS・アプリってなに？</p>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: HARDWARE ===== -->
+<div class="section-header">
+  <div class="section-tag tag-orange">ハードウェアとは？</div>
+  <div class="section-line line-orange"></div>
+</div>
+
+<div class="bubble-wrap">
+  <div class="bubble-emoji">🦁</div>
+  <div class="bubble-text">ハードウェアは「<strong>目に見えるもの全般</strong>」のこと！さわったり動かしたりできるパーツのことだよ。</div>
+</div>
+
+<div class="cards-row cards-5">
+  <!-- Keyboard -->
+  <div class="hw-card bg-orange">
+    <div class="icon-wrap">
+      <svg viewBox="0 0 34 34" fill="none">
+        <rect x="2" y="9" width="30" height="18" rx="3" fill="#546E7A"/>
+        <rect x="5" y="12" width="4" height="3" rx="1" fill="#B0BEC5"/>
+        <rect x="10" y="12" width="4" height="3" rx="1" fill="#B0BEC5"/>
+        <rect x="15" y="12" width="4" height="3" rx="1" fill="#B0BEC5"/>
+        <rect x="20" y="12" width="4" height="3" rx="1" fill="#B0BEC5"/>
+        <rect x="25" y="12" width="4" height="3" rx="1" fill="#B0BEC5"/>
+        <rect x="5" y="17" width="4" height="3" rx="1" fill="#B0BEC5"/>
+        <rect x="10" y="17" width="4" height="3" rx="1" fill="#B0BEC5"/>
+        <rect x="15" y="17" width="4" height="3" rx="1" fill="#B0BEC5"/>
+        <rect x="20" y="17" width="4" height="3" rx="1" fill="#B0BEC5"/>
+        <rect x="25" y="17" width="4" height="3" rx="1" fill="#B0BEC5"/>
+        <rect x="10" y="22" width="14" height="3" rx="1" fill="#90A4AE"/>
+      </svg>
+    </div>
+    <div class="card-label">キーボード</div>
+    <div class="card-desc">文字を入力する</div>
+  </div>
+  <!-- Mouse -->
+  <div class="hw-card bg-amber">
+    <div class="icon-wrap">
+      <svg viewBox="0 0 34 34" fill="none">
+        <rect x="9" y="5" width="16" height="22" rx="8" fill="#78909C"/>
+        <rect x="9" y="5" width="8" height="12" rx="4" fill="#90A4AE"/>
+        <rect x="16" y="5" width="9" height="12" rx="4" fill="#78909C"/>
+        <line x1="17" y1="5" x2="17" y2="17" stroke="#546E7A" stroke-width="1.2"/>
+        <ellipse cx="17" cy="22" rx="3" ry="4" fill="#546E7A" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="card-label">マウス</div>
+    <div class="card-desc">画面を操作する</div>
+  </div>
+  <!-- Display -->
+  <div class="hw-card bg-blue">
+    <div class="icon-wrap">
+      <svg viewBox="0 0 34 34" fill="none">
+        <rect x="3" y="5" width="28" height="18" rx="2" fill="#37474F"/>
+        <rect x="5" y="7" width="24" height="14" rx="1" fill="#64B5F6"/>
+        <rect x="5" y="7" width="24" height="14" rx="1" fill="url(#scr)"/>
+        <rect x="14" y="23" width="6" height="4" rx="1" fill="#546E7A"/>
+        <rect x="10" y="27" width="14" height="2" rx="1" fill="#78909C"/>
+        <defs>
+          <linearGradient id="scr" x1="5" y1="7" x2="29" y2="21" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#90CAF9"/>
+            <stop offset="100%" stop-color="#1565C0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="card-label">ディスプレイ</div>
+    <div class="card-desc">映像を映し出す</div>
+  </div>
+  <!-- CPU -->
+  <div class="hw-card bg-teal">
+    <div class="icon-wrap">
+      <svg viewBox="0 0 34 34" fill="none">
+        <rect x="8" y="8" width="18" height="18" rx="2" fill="#455A64"/>
+        <rect x="11" y="11" width="12" height="12" rx="1" fill="#26C6DA"/>
+        <rect x="13" y="13" width="8" height="8" rx="0.5" fill="#00838F"/>
+        <line x1="10" y1="5" x2="10" y2="8" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="14" y1="5" x2="14" y2="8" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="5" x2="18" y2="8" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="22" y1="5" x2="22" y2="8" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="10" y1="26" x2="10" y2="29" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="14" y1="26" x2="14" y2="29" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="26" x2="18" y2="29" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="22" y1="26" x2="22" y2="29" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="5" y1="10" x2="8" y2="10" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="5" y1="14" x2="8" y2="14" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="5" y1="18" x2="8" y2="18" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="5" y1="22" x2="8" y2="22" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="26" y1="10" x2="29" y2="10" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="26" y1="14" x2="29" y2="14" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="26" y1="18" x2="29" y2="18" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="26" y1="22" x2="29" y2="22" stroke="#546E7A" stroke-width="1.5" stroke-linecap="round"/>
+        <text x="17" y="20" text-anchor="middle" font-size="4" fill="white" font-weight="bold">CPU</text>
+      </svg>
+    </div>
+    <div class="card-label">CPU（チップ）</div>
+    <div class="card-desc">計算・処理する脳</div>
+  </div>
+  <!-- Printer -->
+  <div class="hw-card bg-indigo">
+    <div class="icon-wrap">
+      <svg viewBox="0 0 34 34" fill="none">
+        <rect x="4" y="14" width="26" height="12" rx="2" fill="#455A64"/>
+        <rect x="9" y="10" width="16" height="6" rx="1" fill="#546E7A"/>
+        <rect x="9" y="24" width="16" height="8" rx="1" fill="#90A4AE"/>
+        <rect x="11" y="26" width="12" height="1.5" rx="0.5" fill="#fff"/>
+        <rect x="11" y="29" width="8" height="1.5" rx="0.5" fill="#fff"/>
+        <circle cx="25" cy="20" r="2" fill="#42A5F5"/>
+      </svg>
+    </div>
+    <div class="card-label">プリンタ</div>
+    <div class="card-desc">紙に印刷する</div>
+  </div>
+</div>
+
+<!-- ===== BODY ANALOGY ===== -->
+<div class="section-header" style="margin-top:10px">
+  <div class="section-tag tag-purple">人間のからだにたとえると…</div>
+  <div class="section-line line-purple"></div>
+</div>
+
+<div class="analogy-box">
+  <!-- Hardware = Body -->
+  <div class="analogy-col">
+    <svg viewBox="0 0 70 90" fill="none">
+      <!-- Muscled body silhouette -->
+      <ellipse cx="35" cy="14" rx="10" ry="11" fill="#EF9A9A"/>
+      <ellipse cx="35" cy="14" rx="10" ry="11" fill="none" stroke="#E57373" stroke-width="1.5"/>
+      <!-- face features -->
+      <circle cx="31" cy="13" r="2" fill="#E53935" opacity="0.6"/>
+      <circle cx="39" cy="13" r="2" fill="#E53935" opacity="0.6"/>
+      <path d="M31 18 Q35 21 39 18" stroke="#E53935" stroke-width="1" fill="none"/>
+      <!-- torso -->
+      <rect x="22" y="26" width="26" height="32" rx="4" fill="#EF9A9A"/>
+      <rect x="22" y="26" width="26" height="32" rx="4" fill="none" stroke="#E57373" stroke-width="1.5"/>
+      <!-- muscle lines -->
+      <line x1="35" y1="26" x2="35" y2="57" stroke="#E57373" stroke-width="1" opacity="0.5"/>
+      <ellipse cx="29" cy="36" rx="4" ry="5" fill="none" stroke="#E57373" stroke-width="1" opacity="0.6"/>
+      <ellipse cx="41" cy="36" rx="4" ry="5" fill="none" stroke="#E57373" stroke-width="1" opacity="0.6"/>
+      <ellipse cx="29" cy="47" rx="4" ry="4" fill="none" stroke="#E57373" stroke-width="1" opacity="0.6"/>
+      <ellipse cx="41" cy="47" rx="4" ry="4" fill="none" stroke="#E57373" stroke-width="1" opacity="0.6"/>
+      <!-- arms -->
+      <rect x="7" y="26" width="13" height="26" rx="6" fill="#EF9A9A"/>
+      <rect x="7" y="26" width="13" height="26" rx="6" fill="none" stroke="#E57373" stroke-width="1.5"/>
+      <rect x="50" y="26" width="13" height="26" rx="6" fill="#EF9A9A"/>
+      <rect x="50" y="26" width="13" height="26" rx="6" fill="none" stroke="#E57373" stroke-width="1.5"/>
+      <!-- legs -->
+      <rect x="22" y="57" width="12" height="28" rx="5" fill="#EF9A9A"/>
+      <rect x="22" y="57" width="12" height="28" rx="5" fill="none" stroke="#E57373" stroke-width="1.5"/>
+      <rect x="36" y="57" width="12" height="28" rx="5" fill="#EF9A9A"/>
+      <rect x="36" y="57" width="12" height="28" rx="5" fill="none" stroke="#E57373" stroke-width="1.5"/>
+    </svg>
+    <div class="analogy-label">ハードウェア</div>
+    <div class="analogy-desc">＝<strong>人間のからだ（肉体）</strong><br>目に見えてさわれる<br>キーボード・マウス・CPUなど</div>
+  </div>
+
+  <div class="analogy-vs">↔</div>
+
+  <!-- Software = Mind/Nerves -->
+  <div class="analogy-col">
+    <svg viewBox="0 0 70 90" fill="none">
+      <!-- Skeleton/nervous system body -->
+      <ellipse cx="35" cy="14" rx="10" ry="11" fill="#B3E5FC" opacity="0.6"/>
+      <ellipse cx="35" cy="14" rx="10" ry="11" fill="none" stroke="#29B6F6" stroke-width="1.5"/>
+      <!-- brain -->
+      <ellipse cx="35" cy="11" rx="7" ry="6" fill="#81D4FA"/>
+      <path d="M29 11 Q32 8 35 11 Q38 8 41 11" stroke="#29B6F6" stroke-width="1" fill="none"/>
+      <!-- eyes -->
+      <circle cx="31.5" cy="14" r="1.5" fill="#0288D1"/>
+      <circle cx="38.5" cy="14" r="1.5" fill="#0288D1"/>
+      <!-- spine -->
+      <line x1="35" y1="25" x2="35" y2="57" stroke="#29B6F6" stroke-width="2.5" stroke-dasharray="3,2"/>
+      <!-- ribs -->
+      <path d="M35 32 Q26 30 24 36 Q26 38 35 37" stroke="#29B6F6" stroke-width="1.2" fill="none"/>
+      <path d="M35 32 Q44 30 46 36 Q44 38 35 37" stroke="#29B6F6" stroke-width="1.2" fill="none"/>
+      <path d="M35 41 Q26 39 24 44 Q26 46 35 45" stroke="#29B6F6" stroke-width="1.2" fill="none"/>
+      <path d="M35 41 Q44 39 46 44 Q44 46 35 45" stroke="#29B6F6" stroke-width="1.2" fill="none"/>
+      <!-- body outline -->
+      <rect x="22" y="26" width="26" height="32" rx="4" fill="none" stroke="#29B6F6" stroke-width="1.5" opacity="0.5"/>
+      <!-- arms -->
+      <rect x="7" y="26" width="13" height="26" rx="6" fill="none" stroke="#29B6F6" stroke-width="1.5" opacity="0.5"/>
+      <rect x="50" y="26" width="13" height="26" rx="6" fill="none" stroke="#29B6F6" stroke-width="1.5" opacity="0.5"/>
+      <!-- nerve lines in arms -->
+      <line x1="13" y1="27" x2="13" y2="51" stroke="#29B6F6" stroke-width="1.2" stroke-dasharray="3,2"/>
+      <line x1="57" y1="27" x2="57" y2="51" stroke="#29B6F6" stroke-width="1.2" stroke-dasharray="3,2"/>
+      <!-- legs -->
+      <rect x="22" y="57" width="12" height="28" rx="5" fill="none" stroke="#29B6F6" stroke-width="1.5" opacity="0.5"/>
+      <rect x="36" y="57" width="12" height="28" rx="5" fill="none" stroke="#29B6F6" stroke-width="1.5" opacity="0.5"/>
+      <line x1="28" y1="58" x2="28" y2="84" stroke="#29B6F6" stroke-width="1.2" stroke-dasharray="3,2"/>
+      <line x1="42" y1="58" x2="42" y2="84" stroke="#29B6F6" stroke-width="1.2" stroke-dasharray="3,2"/>
+    </svg>
+    <div class="analogy-label" style="background:#42A5F5">ソフトウェア</div>
+    <div class="analogy-desc">＝<strong>神経・脳・心（意識）</strong><br>目に見えない、けれど<br>体を動かす大切な存在</div>
+  </div>
+</div>
+
+<div class="bubble-wrap">
+  <div class="bubble-emoji">💡</div>
+  <div class="bubble-text">どちらか一方だけでは動かない！ハードとソフト、<strong>両方そろってはじめてパソコンは動く</strong>よ。</div>
+</div>
+
+<!-- ===== SECTION 2: SOFTWARE ===== -->
+<div class="section-header" style="margin-top:8px">
+  <div class="section-tag tag-teal">ソフトウェアのしゅるい</div>
+  <div class="section-line line-teal"></div>
+</div>
+
+<div class="sw-grid">
+  <div class="sw-card os">
+    <div class="sw-title">
+      <svg width="22" height="22" viewBox="0 0 22 22">
+        <rect width="10" height="10" x="1" y="1" rx="1.5" fill="#0078D4"/>
+        <rect width="10" height="10" x="11.5" y="1" rx="1.5" fill="#0078D4" opacity="0.8"/>
+        <rect width="10" height="10" x="1" y="11.5" rx="1.5" fill="#0078D4" opacity="0.8"/>
+        <rect width="10" height="10" x="11.5" y="11.5" rx="1.5" fill="#0078D4" opacity="0.6"/>
+      </svg>
+      OS（オーエス）
+    </div>
+    <div class="sw-sub">パソコンを動かすための<strong>一番大きなソフト</strong>。人間の操作を機械が分かる言葉に「翻訳」してくれる。OSがないとアプリは動かない！</div>
+    <div class="examples-row">
+      <span class="ex-chip os-chip">🪟 Windows</span>
+      <span class="ex-chip os-chip" style="background:#F3E5F5;color:#6A1B9A;">🍎 Mac（macOS）</span>
+      <span class="ex-chip os-chip" style="background:#E8F5E9;color:#1B5E20;">🤖 Android</span>
+      <span class="ex-chip os-chip" style="background:#FCE4EC;color:#880E4F;">📱 iOS</span>
+    </div>
+  </div>
+  <div class="sw-card app">
+    <div class="sw-title">
+      <svg width="22" height="22" viewBox="0 0 22 22">
+        <rect x="1" y="1" width="20" height="20" rx="5" fill="#66BB6A"/>
+        <text x="11" y="16" text-anchor="middle" font-size="13" fill="white">App</text>
+      </svg>
+      アプリ
+    </div>
+    <div class="sw-sub">OSの上で動くソフト。OSという「親方」に助けてもらいながら動いている。MacにしかないアプリやWindowsにしかないアプリもある。</div>
+    <div class="examples-row">
+      <span class="ex-chip app-chip">🎮 ゲーム</span>
+      <span class="ex-chip app-chip">🗺️ 地図</span>
+      <span class="ex-chip app-chip">📊 表計算</span>
+      <span class="ex-chip app-chip">🎵 音楽</span>
+      <span class="ex-chip app-chip">📷 カメラ</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== OS/APP LAYER DIAGRAM ===== -->
+<div style="margin:7px 0 4px; background:#F0F4FF; border-radius:14px; border:2px solid #C5CAE9; padding:9px 12px;">
+  <div style="font-weight:800; font-size:11px; color:#3949AB; margin-bottom:7px; text-align:center;">💡 OSとアプリの関係　―　どんな「かさなり」になっている？</div>
+
+  <svg viewBox="0 0 520 118" width="100%" style="display:block;" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- ===== LAYER STACK (left side) ===== -->
+    <!-- Layer 3: Apps (top) -->
+    <rect x="10" y="4" width="240" height="30" rx="8" fill="#C8E6C9"/>
+    <rect x="10" y="4" width="240" height="30" rx="8" fill="none" stroke="#66BB6A" stroke-width="2"/>
+    <text x="130" y="15" text-anchor="middle" font-family="'M PLUS Rounded 1c',sans-serif" font-size="8" font-weight="800" fill="#2E7D32">アプリ層</text>
+    <!-- app icons row -->
+    <rect x="20" y="19" width="20" height="10" rx="3" fill="#FF7043"/>
+    <text x="30" y="27" text-anchor="middle" font-size="7" fill="white" font-family="sans-serif">🎮</text>
+    <rect x="44" y="19" width="20" height="10" rx="3" fill="#42A5F5"/>
+    <text x="54" y="27" text-anchor="middle" font-size="7" fill="white" font-family="sans-serif">🗺️</text>
+    <rect x="68" y="19" width="20" height="10" rx="3" fill="#AB47BC"/>
+    <text x="78" y="27" text-anchor="middle" font-size="7" fill="white" font-family="sans-serif">🎵</text>
+    <rect x="92" y="19" width="20" height="10" rx="3" fill="#26A69A"/>
+    <text x="102" y="27" text-anchor="middle" font-size="7" fill="white" font-family="sans-serif">📷</text>
+    <rect x="116" y="19" width="20" height="10" rx="3" fill="#FFA726"/>
+    <text x="126" y="27" text-anchor="middle" font-size="7" fill="white" font-family="sans-serif">📊</text>
+    <text x="145" y="27" font-size="7" fill="#388E3C" font-family="sans-serif">など…</text>
+
+    <!-- Layer 2: OS (middle) -->
+    <rect x="10" y="40" width="240" height="34" rx="8" fill="#BBDEFB"/>
+    <rect x="10" y="40" width="240" height="34" rx="8" fill="none" stroke="#42A5F5" stroke-width="2"/>
+    <text x="130" y="52" text-anchor="middle" font-family="'M PLUS Rounded 1c',sans-serif" font-size="8" font-weight="800" fill="#0D47A1">OS層　（アプリを動かす「土台」）</text>
+    <!-- OS logos row -->
+    <!-- Windows icon -->
+    <rect x="22" y="57" width="7" height="7" rx="0.5" fill="#0078D4"/>
+    <rect x="30" y="57" width="7" height="7" rx="0.5" fill="#0078D4" opacity="0.75"/>
+    <rect x="22" y="65" width="7" height="7" rx="0.5" fill="#0078D4" opacity="0.75"/>
+    <rect x="30" y="65" width="7" height="7" rx="0.5" fill="#0078D4" opacity="0.55"/>
+    <text x="42" y="65" font-size="8" fill="#1565C0" font-weight="800" font-family="sans-serif">Windows</text>
+    <!-- Apple icon -->
+    <text x="105" y="67" font-size="12" font-family="sans-serif">🍎</text>
+    <text x="118" y="65" font-size="8" fill="#5D4037" font-weight="800" font-family="sans-serif">macOS</text>
+    <!-- Android -->
+    <text x="165" y="67" font-size="10" font-family="sans-serif">🤖</text>
+    <text x="177" y="65" font-size="8" fill="#1B5E20" font-weight="800" font-family="sans-serif">Android</text>
+
+    <!-- Layer 1: Hardware (bottom) -->
+    <rect x="10" y="80" width="240" height="30" rx="8" fill="#CFD8DC"/>
+    <rect x="10" y="80" width="240" height="30" rx="8" fill="none" stroke="#90A4AE" stroke-width="2"/>
+    <text x="130" y="93" text-anchor="middle" font-family="'M PLUS Rounded 1c',sans-serif" font-size="8" font-weight="800" fill="#37474F">ハードウェア層　（CPU・メモリ・ストレージ…）</text>
+    <!-- small hardware icons -->
+    <text x="30" y="105" text-anchor="middle" font-size="10" font-family="sans-serif">🖥️</text>
+    <text x="65" y="105" text-anchor="middle" font-size="10" font-family="sans-serif">⌨️</text>
+    <text x="100" y="105" text-anchor="middle" font-size="10" font-family="sans-serif">🖱️</text>
+    <text x="135" y="105" text-anchor="middle" font-size="10" font-family="sans-serif">💾</text>
+    <text x="170" y="105" text-anchor="middle" font-size="10" font-family="sans-serif">🧠</text>
+
+    <!-- layer labels on right of stack -->
+    <text x="256" y="23" font-size="9" fill="#2E7D32" font-weight="800" font-family="sans-serif">③ アプリ</text>
+    <text x="256" y="61" font-size="9" fill="#0D47A1" font-weight="800" font-family="sans-serif">② OS</text>
+    <text x="256" y="99" font-size="9" fill="#37474F" font-weight="800" font-family="sans-serif">① ハードウェア</text>
+    <!-- bracket -->
+    <path d="M252 8 L250 8 L250 108 L252 108" stroke="#BDBDBD" stroke-width="1.5" fill="none"/>
+
+    <!-- ===== RIGHT SIDE: KEY POINTS ===== -->
+    <!-- Arrow: アプリはOSの上で動く -->
+    <line x1="310" y1="19" x2="310" y2="55" stroke="#66BB6A" stroke-width="2" marker-end="url(#g1)"/>
+    <rect x="316" y="6" width="156" height="28" rx="8" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1.5"/>
+    <text x="394" y="17" text-anchor="middle" font-size="8.5" font-weight="800" fill="#2E7D32" font-family="sans-serif">アプリはOSの上でしか</text>
+    <text x="394" y="28" text-anchor="middle" font-size="8.5" font-weight="800" fill="#2E7D32" font-family="sans-serif">動かない！</text>
+
+    <!-- Arrow: OSはハードを動かす -->
+    <line x1="310" y1="55" x2="310" y2="88" stroke="#42A5F5" stroke-width="2" marker-end="url(#b1)"/>
+    <rect x="316" y="42" width="156" height="28" rx="8" fill="#E3F2FD" stroke="#42A5F5" stroke-width="1.5"/>
+    <text x="394" y="53" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0D47A1" font-family="sans-serif">OSが人間の操作を</text>
+    <text x="394" y="64" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0D47A1" font-family="sans-serif">機械に「翻訳」する</text>
+
+    <!-- Arrow: hardware is base -->
+    <rect x="316" y="78" width="156" height="28" rx="8" fill="#ECEFF1" stroke="#90A4AE" stroke-width="1.5"/>
+    <text x="394" y="89" text-anchor="middle" font-size="8.5" font-weight="800" fill="#37474F" font-family="sans-serif">ハードがないと</text>
+    <text x="394" y="100" text-anchor="middle" font-size="8.5" font-weight="800" fill="#37474F" font-family="sans-serif">OSもアプリも動かない！</text>
+
+    <defs>
+      <marker id="g1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#66BB6A"/>
+      </marker>
+      <marker id="b1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#42A5F5"/>
+      </marker>
+    </defs>
+  </svg>
+</div>
+
+<!-- ===== PARTS PANEL (manga grid style) ===== -->
+<div class="section-header" style="margin-top:8px; page-break-before:always; break-before:page;">
+  <div class="section-tag tag-orange">パソコンのパーツ図かん</div>
+  <div class="section-line line-orange"></div>
+</div>
+
+<div style="position:relative; margin:6px 0;">
+  <div class="parts-panel">
+    <!-- TOP LEFT: CPU -->
+    <div class="panel-cell panel-bg-yellow">
+      <svg viewBox="0 0 90 70" width="90" height="70" fill="none">
+        <rect x="18" y="8" width="54" height="54" rx="4" fill="#607D8B"/>
+        <rect x="24" y="14" width="42" height="42" rx="2" fill="#90A4AE"/>
+        <rect x="30" y="20" width="30" height="30" rx="2" fill="#78909C"/>
+        <rect x="34" y="24" width="22" height="22" rx="1" fill="#455A64"/>
+        <!-- pins top -->
+        <line x1="30" y1="8" x2="30" y2="2" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="38" y1="8" x2="38" y2="2" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="46" y1="8" x2="46" y2="2" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="54" y1="8" x2="54" y2="2" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="62" y1="8" x2="62" y2="2" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- pins bottom -->
+        <line x1="30" y1="62" x2="30" y2="68" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="38" y1="62" x2="38" y2="68" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="46" y1="62" x2="46" y2="68" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="54" y1="62" x2="54" y2="68" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="62" y1="62" x2="62" y2="68" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- pins left -->
+        <line x1="18" y1="24" x2="8" y2="24" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="18" y1="32" x2="8" y2="32" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="18" y1="40" x2="8" y2="40" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="18" y1="48" x2="8" y2="48" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- pins right -->
+        <line x1="72" y1="24" x2="82" y2="24" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="72" y1="32" x2="82" y2="32" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="72" y1="40" x2="82" y2="40" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="72" y1="48" x2="82" y2="48" stroke="#607D8B" stroke-width="2.5" stroke-linecap="round"/>
+        <text x="45" y="37" text-anchor="middle" font-size="9" fill="#CFD8DC" font-weight="bold" font-family="monospace">CPU</text>
+        <text x="45" y="47" text-anchor="middle" font-size="7" fill="#90A4AE" font-family="monospace">Core i7</text>
+      </svg>
+      <div class="part-label">🧠 CPU（チップ）</div>
+      <div class="part-sub">計算・処理をする脳<br>GHz（ギガヘルツ）で速さを表す</div>
+    </div>
+
+    <!-- TOP RIGHT: Memory stick -->
+    <div class="panel-cell panel-bg-teal">
+      <svg viewBox="0 0 90 70" width="90" height="70" fill="none">
+        <!-- Memory stick long horizontal -->
+        <rect x="5" y="28" width="80" height="18" rx="2" fill="#78909C"/>
+        <rect x="5" y="28" width="80" height="4" rx="1" fill="#90A4AE"/>
+        <!-- notch -->
+        <rect x="32" y="42" width="6" height="4" rx="1" fill="#546E7A"/>
+        <!-- chips on memory -->
+        <rect x="12" y="32" width="8" height="8" rx="1" fill="#455A64"/>
+        <rect x="23" y="32" width="8" height="8" rx="1" fill="#455A64"/>
+        <rect x="38" y="32" width="8" height="8" rx="1" fill="#455A64"/>
+        <rect x="49" y="32" width="8" height="8" rx="1" fill="#455A64"/>
+        <rect x="60" y="32" width="8" height="8" rx="1" fill="#455A64"/>
+        <rect x="71" y="32" width="8" height="8" rx="1" fill="#455A64"/>
+        <!-- pins at bottom -->
+        <rect x="10" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+        <rect x="15" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+        <rect x="20" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+        <rect x="25" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+        <rect x="30" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+        <rect x="38" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+        <rect x="43" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+        <rect x="48" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+        <rect x="53" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+        <rect x="58" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+        <rect x="63" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+        <rect x="68" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+        <rect x="73" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+        <rect x="78" y="45" width="3" height="6" rx="0.5" fill="#B0BEC5"/>
+      </svg>
+      <div class="part-label">📋 メモリ</div>
+      <div class="part-sub">CPUの作業スペース（机）<br>GB（ギガバイト）で広さを表す</div>
+    </div>
+
+    <!-- BOTTOM LEFT: HDD/SSD -->
+    <div class="panel-cell panel-bg-orange">
+      <div style="display:flex;gap:10px;align-items:center;">
+        <!-- HDD -->
+        <div style="text-align:center;">
+          <svg viewBox="0 0 50 50" width="48" height="48" fill="none">
+            <rect x="3" y="8" width="44" height="34" rx="4" fill="#546E7A"/>
+            <rect x="3" y="8" width="44" height="34" rx="4" fill="none" stroke="#78909C" stroke-width="1.5"/>
+            <circle cx="25" cy="25" r="12" fill="#607D8B"/>
+            <circle cx="25" cy="25" r="8" fill="#455A64"/>
+            <circle cx="25" cy="25" r="3" fill="#78909C"/>
+            <circle cx="37" cy="11" r="3" fill="#4CAF50"/>
+          </svg>
+          <div style="font-size:8px;font-weight:800;color:#37474F;">HDD</div>
+          <div style="font-size:7.5px;color:#666;">容量↑・速度↓</div>
+        </div>
+        <div style="font-size:14px;color:#90A4AE;font-weight:800;">VS</div>
+        <!-- SSD -->
+        <div style="text-align:center;">
+          <svg viewBox="0 0 50 50" width="48" height="48" fill="none">
+            <rect x="3" y="12" width="44" height="26" rx="3" fill="#455A64"/>
+            <rect x="3" y="12" width="44" height="26" rx="3" fill="none" stroke="#78909C" stroke-width="1.5"/>
+            <rect x="8" y="17" width="8" height="8" rx="1" fill="#607D8B"/>
+            <rect x="19" y="17" width="8" height="8" rx="1" fill="#607D8B"/>
+            <rect x="30" y="17" width="8" height="8" rx="1" fill="#607D8B"/>
+            <rect x="8" y="28" width="5" height="4" rx="0.5" fill="#78909C"/>
+            <rect x="15" y="28" width="5" height="4" rx="0.5" fill="#78909C"/>
+            <rect x="22" y="28" width="5" height="4" rx="0.5" fill="#78909C"/>
+            <rect x="29" y="28" width="5" height="4" rx="0.5" fill="#78909C"/>
+            <rect x="36" y="28" width="5" height="4" rx="0.5" fill="#78909C"/>
+            <circle cx="40" cy="18" r="3" fill="#F44336"/>
+          </svg>
+          <div style="font-size:8px;font-weight:800;color:#37474F;">SSD</div>
+          <div style="font-size:7.5px;color:#666;">速度↑・高性能</div>
+        </div>
+      </div>
+      <div class="part-label">💾 ストレージ（保存装置）</div>
+      <div class="part-sub">データを保存する「倉庫」<br>SSDの方がデータを速く取り出せる！</div>
+    </div>
+
+    <!-- BOTTOM RIGHT: Motherboard -->
+    <div class="panel-cell panel-bg-green">
+      <svg viewBox="0 0 90 60" width="90" height="60" fill="none">
+        <!-- board -->
+        <rect x="4" y="4" width="82" height="52" rx="3" fill="#2E7D32"/>
+        <rect x="4" y="4" width="82" height="52" rx="3" fill="none" stroke="#1B5E20" stroke-width="2"/>
+        <!-- traces -->
+        <line x1="15" y1="20" x2="50" y2="20" stroke="#A5D6A7" stroke-width="1"/>
+        <line x1="50" y1="20" x2="50" y2="40" stroke="#A5D6A7" stroke-width="1"/>
+        <line x1="20" y1="35" x2="70" y2="35" stroke="#A5D6A7" stroke-width="1"/>
+        <line x1="35" y1="15" x2="35" y2="50" stroke="#A5D6A7" stroke-width="1"/>
+        <!-- CPU socket -->
+        <rect x="14" y="12" width="22" height="22" rx="2" fill="#1B5E20"/>
+        <rect x="17" y="15" width="16" height="16" rx="1" fill="#388E3C"/>
+        <text x="25" y="26" text-anchor="middle" font-size="6" fill="#A5D6A7" font-weight="bold">CPU</text>
+        <!-- RAM slots -->
+        <rect x="44" y="10" width="5" height="28" rx="1" fill="#1B5E20"/>
+        <rect x="52" y="10" width="5" height="28" rx="1" fill="#1B5E20"/>
+        <!-- capacitors -->
+        <circle cx="72" cy="16" r="4" fill="#4CAF50"/>
+        <circle cx="72" cy="26" r="4" fill="#4CAF50"/>
+        <circle cx="72" cy="36" r="4" fill="#388E3C"/>
+        <!-- connectors bottom -->
+        <rect x="10" y="48" width="18" height="4" rx="1" fill="#1B5E20"/>
+        <rect x="32" y="48" width="18" height="4" rx="1" fill="#1B5E20"/>
+        <rect x="54" y="48" width="18" height="4" rx="1" fill="#1B5E20"/>
+      </svg>
+      <div class="part-label">🔌 マザーボード</div>
+      <div class="part-sub">全パーツをつなぐ「基板」<br>CPUやメモリをここに差し込む</div>
+    </div>
+  </div>
+
+  <!-- center floating bubbles -->
+  <div class="panel-center-bubble">
+    <div class="speech-oval">パソコンは<br>実はシンプル！</div>
+    <div class="speech-oval">パーツの数は<br>そこまでない！</div>
+  </div>
+</div>
+
+<!-- ===== DEVICE SAME SECTION ===== -->
+<div class="section-header" style="margin-top:10px">
+  <div class="section-tag tag-green">ノートも・デスクトップも・スマホも…</div>
+  <div class="section-line line-green"></div>
+</div>
+
+<div class="device-section">
+  <div style="text-align:center;">
+    <span class="device-bubble">造りは全部いっしょ！</span>
+  </div>
+  <div class="device-row">
+    <!-- Laptop -->
+    <div class="device-card">
+      <svg viewBox="0 0 56 44" fill="none">
+        <rect x="4" y="2" width="48" height="32" rx="3" fill="#546E7A"/>
+        <rect x="7" y="5" width="42" height="26" rx="1" fill="#64B5F6"/>
+        <rect x="7" y="5" width="42" height="26" rx="1" fill="none" stroke="#90A4AE" stroke-width="0.5"/>
+        <rect x="1" y="34" width="54" height="5" rx="2" fill="#78909C"/>
+        <rect x="18" y="34" width="20" height="2" rx="1" fill="#546E7A"/>
+        <!-- screen content suggestion -->
+        <rect x="10" y="8" width="36" height="3" rx="1" fill="#90CAF9" opacity="0.6"/>
+        <rect x="10" y="13" width="25" height="2" rx="1" fill="#90CAF9" opacity="0.4"/>
+      </svg>
+      <div class="device-name">💻 ノートパソコン</div>
+      <div class="device-chips">
+        <span class="d-chip">CPU</span>
+        <span class="d-chip">メモリ</span>
+        <span class="d-chip">SSD</span>
+        <span class="d-chip">OS</span>
+      </div>
+      <div style="font-size:8.5px;color:#555;margin-top:4px;line-height:1.3;">コンパクトだが<br>スペックはやや低め</div>
+    </div>
+
+    <!-- Desktop -->
+    <div class="device-card">
+      <svg viewBox="0 0 56 44" fill="none">
+        <!-- monitor -->
+        <rect x="8" y="1" width="40" height="28" rx="2" fill="#455A64"/>
+        <rect x="10" y="3" width="36" height="22" rx="1" fill="#64B5F6"/>
+        <rect x="10" y="3" width="36" height="22" rx="1" fill="none" stroke="#90A4AE" stroke-width="0.5"/>
+        <rect x="25" y="29" width="6" height="5" rx="1" fill="#546E7A"/>
+        <rect x="18" y="34" width="20" height="2" rx="1" fill="#78909C"/>
+        <!-- tower box -->
+        <rect x="38" y="24" width="14" height="18" rx="2" fill="#546E7A"/>
+        <circle cx="45" cy="28" r="2" fill="#4CAF50"/>
+        <rect x="40" y="31" width="10" height="2" rx="0.5" fill="#78909C"/>
+        <rect x="40" y="34" width="10" height="2" rx="0.5" fill="#78909C"/>
+      </svg>
+      <div class="device-name">🖥️ デスクトップ</div>
+      <div class="device-chips">
+        <span class="d-chip">CPU</span>
+        <span class="d-chip">メモリ</span>
+        <span class="d-chip">SSD</span>
+        <span class="d-chip">OS</span>
+      </div>
+      <div style="font-size:8.5px;color:#555;margin-top:4px;line-height:1.3;">高性能にしやすい<br>拡張・改造もできる</div>
+    </div>
+
+    <!-- Smartphone -->
+    <div class="device-card">
+      <svg viewBox="0 0 56 44" fill="none">
+        <rect x="17" y="1" width="22" height="42" rx="4" fill="#455A64"/>
+        <rect x="19" y="5" width="18" height="32" rx="2" fill="#64B5F6"/>
+        <circle cx="28" cy="40" r="2" fill="#78909C"/>
+        <rect x="23" y="3" width="10" height="1.5" rx="0.5" fill="#78909C"/>
+        <!-- screen content -->
+        <rect x="21" y="8" width="14" height="2" rx="0.5" fill="#90CAF9" opacity="0.6"/>
+        <rect x="21" y="12" width="10" height="2" rx="0.5" fill="#90CAF9" opacity="0.4"/>
+        <!-- app icons -->
+        <rect x="21" y="20" width="5" height="5" rx="1" fill="#FF7043" opacity="0.7"/>
+        <rect x="28" y="20" width="5" height="5" rx="1" fill="#4CAF50" opacity="0.7"/>
+        <rect x="21" y="27" width="5" height="5" rx="1" fill="#42A5F5" opacity="0.7"/>
+        <rect x="28" y="27" width="5" height="5" rx="1" fill="#AB47BC" opacity="0.7"/>
+      </svg>
+      <div class="device-name">📱 スマートフォン</div>
+      <div class="device-chips">
+        <span class="d-chip">CPU</span>
+        <span class="d-chip">メモリ</span>
+        <span class="d-chip">SSD</span>
+        <span class="d-chip">OS</span>
+      </div>
+      <div style="font-size:8.5px;color:#555;margin-top:4px;line-height:1.3;">小型・省電力の<br>パーツを使っている</div>
+    </div>
+  </div>
+  <div class="bubble-wrap" style="margin:8px 0 0;background:#fff;border-color:#80CBC4;">
+    <div class="bubble-emoji">💡</div>
+    <div class="bubble-text">どれも中身は同じ！CPU・メモリ・ストレージ・OSがそろっている。スマホは<strong>小型・省電力のパーツ</strong>を使うので少しスペックが低い。</div>
+  </div>
+</div>
+
+<!-- ===== SECTION 3: KITCHEN SCENE ===== -->
+<div class="section-header" style="margin-top:8px">
+  <div class="section-tag tag-teal">3大パーツのやくわり ― レストランに例えると…</div>
+  <div class="section-line line-teal"></div>
+</div>
+
+<!-- Kitchen scene SVG -->
+<div style="background:#F5F0EB; border-radius:16px; border:2.5px solid #D7CCC8; padding:10px 12px 8px; margin:6px 0; position:relative;">
+
+  <svg viewBox="0 0 560 200" width="100%" style="display:block;" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- ===== BACKGROUND / FLOOR / WALL ===== -->
+    <rect width="560" height="200" fill="#ECEFF1"/>
+    <!-- wall -->
+    <rect width="560" height="130" fill="#CFD8DC"/>
+    <!-- floor -->
+    <rect y="130" width="560" height="70" fill="#BCAAA4"/>
+    <!-- tile lines on wall -->
+    <line x1="0" y1="80" x2="560" y2="80" stroke="#B0BEC5" stroke-width="0.5"/>
+    <line x1="0" y1="40" x2="560" y2="40" stroke="#B0BEC5" stroke-width="0.5"/>
+    <line x1="0" y1="120" x2="560" y2="120" stroke="#B0BEC5" stroke-width="0.5"/>
+    <line x1="100" y1="0" x2="100" y2="130" stroke="#B0BEC5" stroke-width="0.5"/>
+    <line x1="200" y1="0" x2="200" y2="130" stroke="#B0BEC5" stroke-width="0.5"/>
+    <line x1="300" y1="0" x2="300" y2="130" stroke="#B0BEC5" stroke-width="0.5"/>
+    <line x1="400" y1="0" x2="400" y2="130" stroke="#B0BEC5" stroke-width="0.5"/>
+    <line x1="500" y1="0" x2="500" y2="130" stroke="#B0BEC5" stroke-width="0.5"/>
+
+    <!-- ===== STOVE / COUNTER (メモリ = 調理台) ===== -->
+    <!-- counter body -->
+    <rect x="130" y="112" width="210" height="30" rx="2" fill="#78909C"/>
+    <rect x="128" y="108" width="214" height="10" rx="2" fill="#90A4AE"/>
+    <!-- stove surface -->
+    <rect x="135" y="95" width="200" height="18" rx="2" fill="#546E7A"/>
+    <!-- burners -->
+    <ellipse cx="165" cy="104" rx="14" ry="10" fill="#455A64"/>
+    <ellipse cx="165" cy="104" rx="9" ry="6" fill="#37474F"/>
+    <ellipse cx="165" cy="104" rx="4" ry="3" fill="#FF7043" opacity="0.7"/>
+    <ellipse cx="210" cy="104" rx="14" ry="10" fill="#455A64"/>
+    <ellipse cx="210" cy="104" rx="9" ry="6" fill="#37474F"/>
+    <ellipse cx="210" cy="104" rx="4" ry="3" fill="#FF7043" opacity="0.7"/>
+    <ellipse cx="255" cy="104" rx="14" ry="10" fill="#455A64"/>
+    <ellipse cx="255" cy="104" rx="9" ry="6" fill="#37474F"/>
+    <ellipse cx="255" cy="104" rx="4" ry="3" fill="#FF7043" opacity="0.4"/>
+    <ellipse cx="305" cy="104" rx="14" ry="10" fill="#455A64"/>
+    <ellipse cx="305" cy="104" rx="9" ry="6" fill="#37474F"/>
+    <!-- cutting board on counter -->
+    <rect x="148" y="87" width="38" height="26" rx="2" fill="#A1887F"/>
+    <rect x="150" y="89" width="34" height="22" rx="1" fill="#BCAAA4"/>
+    <!-- food on board -->
+    <ellipse cx="164" cy="100" rx="9" ry="6" fill="#FFCCBC"/>
+    <ellipse cx="164" cy="99" rx="7" ry="4" fill="#FFAB91"/>
+    <!-- pot on burner -->
+    <ellipse cx="255" cy="101" rx="16" ry="5" fill="#455A64"/>
+    <rect x="239" y="85" width="32" height="18" rx="3" fill="#546E7A"/>
+    <ellipse cx="255" cy="85" rx="16" ry="4" fill="#607D8B"/>
+    <!-- bowl on counter -->
+    <ellipse cx="300" cy="91" rx="14" ry="5" fill="#78909C"/>
+    <path d="M286 91 Q300 106 314 91" fill="#90A4AE"/>
+    <!-- sauce bottle -->
+    <rect x="324" y="80" width="8" height="28" rx="3" fill="#EF5350"/>
+    <rect x="325" y="75" width="6" height="8" rx="2" fill="#E53935"/>
+    <!-- counter legs -->
+    <rect x="135" y="140" width="6" height="20" rx="1" fill="#607D8B"/>
+    <rect x="328" y="140" width="6" height="20" rx="1" fill="#607D8B"/>
+
+    <!-- ===== FRIDGE (ストレージ = 冷蔵庫) ===== -->
+    <rect x="430" y="30" width="100" height="140" rx="4" fill="#90A4AE"/>
+    <rect x="432" y="32" width="96" height="66" rx="3" fill="#B0BEC5"/>
+    <rect x="432" y="102" width="96" height="66" rx="3" fill="#9E9E9E"/>
+    <!-- fridge handles -->
+    <rect x="450" y="55" width="4" height="20" rx="2" fill="#607D8B"/>
+    <rect x="450" y="122" width="4" height="20" rx="2" fill="#546E7A"/>
+    <!-- fridge vent lines -->
+    <line x1="435" y1="100" x2="525" y2="100" stroke="#78909C" stroke-width="2"/>
+    <!-- fridge feet -->
+    <rect x="436" y="168" width="8" height="5" rx="1" fill="#78909C"/>
+    <rect x="516" y="168" width="8" height="5" rx="1" fill="#78909C"/>
+    <!-- HDD/SSD icons inside fridge (subtle) -->
+    <rect x="442" y="40" width="22" height="14" rx="2" fill="#78909C" opacity="0.4"/>
+    <circle cx="453" cy="47" r="4" fill="#607D8B" opacity="0.5"/>
+    <rect x="470" y="40" width="22" height="8" rx="1" fill="#78909C" opacity="0.4"/>
+
+    <!-- ===== CHEF (CPU = コックさん) ===== -->
+    <!-- head (先に描いて帽子を前に) -->
+    <ellipse cx="235" cy="48" rx="18" ry="18" fill="#FFCC80"/>
+    <!-- face -->
+    <ellipse cx="228" cy="46" rx="2.5" ry="3" fill="#5D4037"/>
+    <ellipse cx="242" cy="46" rx="2.5" ry="3" fill="#5D4037"/>
+    <path d="M228 54 Q235 60 242 54" stroke="#5D4037" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- eyebrows -->
+    <path d="M225 42 Q228 40 231 42" stroke="#5D4037" stroke-width="1.2" fill="none"/>
+    <path d="M239 42 Q242 40 245 42" stroke="#5D4037" stroke-width="1.2" fill="none"/>
+    <!-- chef hat (頭の後に描いて前面に表示) -->
+    <rect x="218" y="8" width="34" height="26" rx="12" fill="#FAFAFA"/>
+    <rect x="214" y="28" width="42" height="8" rx="3" fill="#EEEEEE"/>
+    <!-- chef blue stripe on hat -->
+    <rect x="214" y="28" width="42" height="4" rx="2" fill="#42A5F5" opacity="0.5"/>
+    <!-- chef uniform body -->
+    <rect x="210" y="65" width="52" height="70" rx="6" fill="#FAFAFA"/>
+    <!-- chef coat buttons -->
+    <circle cx="230" cy="80" r="2" fill="#EEEEEE" stroke="#BDBDBD" stroke-width="1"/>
+    <circle cx="230" cy="90" r="2" fill="#EEEEEE" stroke="#BDBDBD" stroke-width="1"/>
+    <circle cx="230" cy="100" r="2" fill="#EEEEEE" stroke="#BDBDBD" stroke-width="1"/>
+    <!-- red stripe on collar -->
+    <path d="M215 68 L230 82" stroke="#EF5350" stroke-width="3" stroke-linecap="round"/>
+    <path d="M255 68 L240 82" stroke="#EF5350" stroke-width="3" stroke-linecap="round"/>
+    <!-- chef arms -->
+    <!-- left arm (pointing at stove) -->
+    <rect x="175" y="70" width="37" height="16" rx="8" fill="#FAFAFA"/>
+    <ellipse cx="174" cy="78" rx="8" ry="8" fill="#FFCC80"/>
+    <!-- right arm (toward fridge) -->
+    <rect x="258" y="70" width="37" height="16" rx="8" fill="#FAFAFA"/>
+    <ellipse cx="296" cy="78" rx="8" ry="8" fill="#FFCC80"/>
+    <!-- chef legs -->
+    <rect x="214" y="130" width="18" height="38" rx="6" fill="#78909C"/>
+    <rect x="238" y="130" width="18" height="38" rx="6" fill="#78909C"/>
+    <!-- chef shoes -->
+    <ellipse cx="223" cy="168" rx="12" ry="5" fill="#37474F"/>
+    <ellipse cx="247" cy="168" rx="12" ry="5" fill="#37474F"/>
+    <!-- chef apron -->
+    <rect x="218" y="90" width="36" height="45" rx="4" fill="#EF5350" opacity="0.25"/>
+
+    <!-- ===== BLENDER (right side extra prop) ===== -->
+    <rect x="390" y="105" width="28" height="40" rx="3" fill="#78909C"/>
+    <rect x="393" y="80" width="22" height="30" rx="3" fill="#B0BEC5" opacity="0.7"/>
+    <rect x="393" y="78" width="22" height="6" rx="2" fill="#90A4AE"/>
+    <rect x="399" y="110" width="3" height="6" rx="1" fill="#607D8B"/>
+    <rect x="406" y="110" width="3" height="6" rx="1" fill="#607D8B"/>
+    <rect x="413" y="110" width="3" height="6" rx="1" fill="#607D8B"/>
+
+    <!-- ===== LABEL PILLS (video style) ===== -->
+    <!-- CPU pill over chef -->
+    <rect x="88" y="58" width="96" height="28" rx="14" fill="#42A5F5"/>
+    <rect x="90" y="60" width="24" height="24" rx="12" fill="rgba(255,255,255,0.25)"/>
+    <text x="122" y="78" font-family="'M PLUS Rounded 1c', sans-serif" font-size="14" font-weight="800" fill="white">CPU</text>
+
+    <!-- CPU small icon in circle -->
+    <rect x="96" y="65" width="12" height="12" rx="2" fill="white" opacity="0.8"/>
+    <line x1="98" y1="63" x2="98" y2="65" stroke="white" stroke-width="1.2"/>
+    <line x1="101" y1="63" x2="101" y2="65" stroke="white" stroke-width="1.2"/>
+    <line x1="104" y1="63" x2="104" y2="65" stroke="white" stroke-width="1.2"/>
+    <line x1="98" y1="77" x2="98" y2="79" stroke="white" stroke-width="1.2"/>
+    <line x1="101" y1="77" x2="101" y2="79" stroke="white" stroke-width="1.2"/>
+    <line x1="104" y1="77" x2="104" y2="79" stroke="white" stroke-width="1.2"/>
+    <!-- arrow from CPU pill to chef -->
+    <path d="M184 72 Q200 72 210 72" stroke="#42A5F5" stroke-width="2" stroke-dasharray="4,2" marker-end="url(#arr1)"/>
+    <defs>
+      <marker id="arr1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#42A5F5"/>
+      </marker>
+      <marker id="arr2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#42A5F5"/>
+      </marker>
+      <marker id="arr3" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 Z" fill="#42A5F5"/>
+      </marker>
+    </defs>
+
+    <!-- メモリ pill below stove (shifted left to point at counter, not chef) -->
+    <rect x="60" y="155" width="116" height="28" rx="14" fill="#42A5F5"/>
+    <rect x="62" y="157" width="24" height="24" rx="12" fill="rgba(255,255,255,0.25)"/>
+    <!-- memory icon in circle -->
+    <rect x="65" y="163" width="18" height="10" rx="1" fill="white" opacity="0.8"/>
+    <rect x="66" y="161" width="2" height="4" rx="0.5" fill="white"/>
+    <rect x="70" y="161" width="2" height="4" rx="0.5" fill="white"/>
+    <rect x="74" y="161" width="2" height="4" rx="0.5" fill="white"/>
+    <rect x="78" y="161" width="2" height="4" rx="0.5" fill="white"/>
+    <text x="95" y="174" font-family="'M PLUS Rounded 1c', sans-serif" font-size="13" font-weight="800" fill="white">メモリ</text>
+    <!-- arrow from メモリ pill up to stove/counter surface -->
+    <path d="M168 155 Q175 140 185 122" stroke="#42A5F5" stroke-width="2" stroke-dasharray="4,2" marker-end="url(#arr2)"/>
+
+    <!-- ストレージ pill near fridge -->
+    <rect x="430" y="8" width="128" height="28" rx="14" fill="#42A5F5"/>
+    <rect x="432" y="10" width="24" height="24" rx="12" fill="rgba(255,255,255,0.25)"/>
+    <!-- storage icon -->
+    <rect x="436" y="15" width="14" height="14" rx="2" fill="white" opacity="0.8"/>
+    <circle cx="443" cy="22" r="3" fill="#90CAF9"/>
+    <text x="461" y="28" font-family="'M PLUS Rounded 1c', sans-serif" font-size="11" font-weight="800" fill="white">ストレージ</text>
+    <text x="461" y="38" font-family="'M PLUS Rounded 1c', sans-serif" font-size="8" fill="rgba(255,255,255,0.85)">(HDD / SSD)</text>
+    <!-- arrow from ストレージ pill to fridge -->
+    <path d="M480 36 Q480 44 480 52" stroke="#42A5F5" stroke-width="2" stroke-dasharray="4,2" marker-end="url(#arr3)"/>
+
+  </svg>
+
+  <!-- 3 info cards below the illustration -->
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:7px; margin-top:6px;">
+    <div style="background:#E3F2FD; border:2px solid #42A5F5; border-radius:12px; padding:7px 8px; text-align:center;">
+      <div style="font-size:10px; font-weight:800; color:#1565C0; margin-bottom:3px;">🧑‍🍳 CPU ＝ コックさん</div>
+      <div style="font-size:8.5px; color:#555; line-height:1.4;">計算・処理をするパソコンの脳。単位は<strong>GHz（ギガヘルツ）</strong>で、数が大きいほど速い！</div>
+    </div>
+    <div style="background:#E8F5E9; border:2px solid #66BB6A; border-radius:12px; padding:7px 8px; text-align:center;">
+      <div style="font-size:10px; font-weight:800; color:#2E7D32; margin-bottom:3px;">🍳 メモリ ＝ 調理台</div>
+      <div style="font-size:8.5px; color:#555; line-height:1.4;">CPUが作業するための「机」。広いほど同時にたくさん処理できる。単位は<strong>GB</strong>。</div>
+    </div>
+    <div style="background:#F3E5F5; border:2px solid #AB47BC; border-radius:12px; padding:7px 8px; text-align:center;">
+      <div style="font-size:10px; font-weight:800; color:#6A1B9A; margin-bottom:3px;">🧊 ストレージ ＝ 冷蔵庫</div>
+      <div style="font-size:8.5px; color:#555; line-height:1.4;">データを保存する「倉庫」。SSDはHDDより素材を速く運べるのでパソコンが速くなる！</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION: パソコンが遅い原因 ===== -->
+<div class="section-header" style="margin-top:10px; page-break-before:always; break-before:page;">
+  <div class="section-tag tag-orange">パソコンが遅い！　どこが原因？</div>
+  <div class="section-line line-orange"></div>
+</div>
+
+<div style="background:#FFF8F6; border-radius:16px; border:2.5px solid #FFCCBC; padding:10px 12px 8px; margin:6px 0;">
+
+  <!-- 3-column cause cards -->
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:7px; margin-bottom:8px;">
+
+    <!-- CPU遅い -->
+    <div style="background:#FFF3E0; border:2.5px solid #FFA726; border-radius:14px; padding:8px 8px; text-align:center;">
+      <div style="font-size:18px; margin-bottom:4px;">🧑‍🍳</div>
+      <div style="font-weight:800; font-size:11px; color:#E65100; margin-bottom:3px;">CPUが遅い</div>
+      <div style="background:#FFA726; color:#fff; border-radius:8px; padding:2px 6px; font-size:9px; font-weight:700; margin-bottom:5px;">料理人の手が遅い</div>
+      <div style="font-size:8.5px; color:#555; line-height:1.4; text-align:left;">動画編集など重い処理でもたつく。<br>→ 対策：<strong>CPUをアップグレード</strong><br><span style="color:#E65100;">※ゲームが重い場合はGPU（グラフィックボード）が主な原因！</span></div>
+    </div>
+
+    <!-- メモリ不足 -->
+    <div style="background:#E3F2FD; border:2.5px solid #42A5F5; border-radius:14px; padding:8px 8px; text-align:center;">
+      <div style="font-size:18px; margin-bottom:4px;">🍳</div>
+      <div style="font-weight:800; font-size:11px; color:#0D47A1; margin-bottom:3px;">メモリが足りない</div>
+      <div style="background:#42A5F5; color:#fff; border-radius:8px; padding:2px 6px; font-size:9px; font-weight:700; margin-bottom:5px;">調理台がせますぎる！</div>
+      <div style="font-size:8.5px; color:#555; line-height:1.4; text-align:left;">タブをたくさん開いたり複数アプリを動かすと重くなる。<br>→ 対策：<strong>メモリを増設（8→16GB）</strong></div>
+    </div>
+
+    <!-- ストレージが遅い -->
+    <div style="background:#F3E5F5; border:2.5px solid #AB47BC; border-radius:14px; padding:8px 8px; text-align:center;">
+      <div style="font-size:18px; margin-bottom:4px;">🧊</div>
+      <div style="font-weight:800; font-size:11px; color:#6A1B9A; margin-bottom:3px;">ストレージが遅い</div>
+      <div style="background:#AB47BC; color:#fff; border-radius:8px; padding:2px 6px; font-size:9px; font-weight:700; margin-bottom:5px;">冷蔵庫から運ぶのが遅い</div>
+      <div style="font-size:8.5px; color:#555; line-height:1.4; text-align:left;">アプリの起動やファイルを開く動作が遅くなる。<br>→ 対策：<strong>HDDをSSDに交換</strong></div>
+    </div>
+  </div>
+
+  <!-- Key insight: wrong cure doesn't work -->
+  <svg viewBox="0 0 540 88" width="100%" style="display:block;" fill="none">
+    <!-- background -->
+    <rect width="540" height="88" rx="12" fill="#FFF3E0"/>
+    <rect width="540" height="88" rx="12" fill="none" stroke="#FFA726" stroke-width="2"/>
+
+    <!-- 左：冷蔵庫を大きくする × -->
+    <rect x="14" y="12" width="150" height="64" rx="8" fill="#FFECB3"/>
+    <rect x="14" y="12" width="150" height="64" rx="8" fill="none" stroke="#FFB300" stroke-width="1.5"/>
+    <!-- fridge icon -->
+    <rect x="22" y="20" width="28" height="46" rx="3" fill="#90A4AE"/>
+    <rect x="24" y="22" width="24" height="20" rx="2" fill="#B0BEC5"/>
+    <rect x="24" y="44" width="24" height="20" rx="2" fill="#9E9E9E"/>
+    <line x1="22" y1="42" x2="50" y2="42" stroke="#78909C" stroke-width="1.5"/>
+    <rect x="26" y="30" width="2" height="8" rx="1" fill="#607D8B"/>
+    <!-- big arrow on fridge = bigger -->
+    <text x="52" y="36" font-size="8" fill="#F57F17" font-weight="800" font-family="sans-serif">冷蔵庫を</text>
+    <text x="52" y="47" font-size="8" fill="#F57F17" font-weight="800" font-family="sans-serif">大きくした！</text>
+    <text x="52" y="60" font-size="8" fill="#888" font-family="sans-serif">（SSD/HDD増量）</text>
+    <!-- X mark -->
+    <circle cx="148" cy="44" r="16" fill="#EF5350" opacity="0.15"/>
+    <line x1="140" y1="36" x2="156" y2="52" stroke="#EF5350" stroke-width="3" stroke-linecap="round"/>
+    <line x1="156" y1="36" x2="140" y2="52" stroke="#EF5350" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- arrow → -->
+    <text x="172" y="50" font-size="22" fill="#BDBDBD" font-family="sans-serif">→</text>
+
+    <!-- 右：コックさんは速くならない -->
+    <rect x="200" y="12" width="180" height="64" rx="8" fill="#FFF9C4"/>
+    <rect x="200" y="12" width="180" height="64" rx="8" fill="none" stroke="#F9A825" stroke-width="1.5"/>
+    <!-- sad chef icon -->
+    <ellipse cx="228" cy="40" rx="14" ry="14" fill="#FFCC80"/>
+    <ellipse cx="223" cy="38" rx="2" ry="2.5" fill="#5D4037"/>
+    <ellipse cx="233" cy="38" rx="2" ry="2.5" fill="#5D4037"/>
+    <!-- sad mouth -->
+    <path d="M223 46 Q228 43 233 46" stroke="#5D4037" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- chef hat -->
+    <rect x="218" y="22" width="20" height="14" rx="6" fill="#F5F5F5"/>
+    <rect x="215" y="30" width="26" height="5" rx="2" fill="#EEEEEE"/>
+    <text x="248" y="35" font-size="8.5" fill="#F57F17" font-weight="800" font-family="sans-serif">コックさん（CPU）の</text>
+    <text x="248" y="47" font-size="8.5" fill="#F57F17" font-weight="800" font-family="sans-serif">速さは変わらない！</text>
+    <text x="248" y="60" font-size="8" fill="#888" font-family="sans-serif">処理速度に影響しない</text>
+
+    <!-- 原因が違う! -->
+    <rect x="392" y="20" width="136" height="48" rx="10" fill="#EF5350" opacity="0.12"/>
+    <text x="460" y="42" text-anchor="middle" font-size="11" font-weight="800" fill="#C62828" font-family="sans-serif">原因に合った</text>
+    <text x="460" y="56" text-anchor="middle" font-size="11" font-weight="800" fill="#C62828" font-family="sans-serif">対策が大事！</text>
+  </svg>
+
+  <div style="background:#fff; border:2px solid #FFA726; border-radius:10px; padding:6px 10px; margin-top:7px; font-size:9.5px; color:#5D4037; line-height:1.5;">
+    💡 <strong>ストレージ（冷蔵庫）を大きくしても、コックさん（CPU）の速さは変わらない！</strong><br>
+    どこが原因かを見きわめて、そこを強化するのがポイント。やみくもに高いパソコンを買う必要はないよ。
+  </div>
+</div>
+
+<!-- ===== CHECK QUESTIONS ===== -->
+<div class="confirm-box">
+  <h3>📝 かくにん問題</h3>
+  <div class="q-row">
+    <div class="q-text">① 「ハードウェア」と「ソフトウェア」のちがいを書こう。</div>
+    <span class="q-line"></span><span class="q-line"></span>
+  </div>
+  <div class="q-row">
+    <div class="q-text">② CPUをレストランにたとえると？　また、メモリは？</div>
+    <span class="q-line"></span><span class="q-line"></span>
+  </div>
+  <div class="q-row" style="margin-bottom:0">
+    <div class="q-text">③ WindowsやMacはどのしゅるいのソフトウェア？</div>
+    <span class="q-line"></span>
+  </div>
+</div>
+
+</body>
+</html>

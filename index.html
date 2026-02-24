@@ -23,7 +23,8 @@
             --accent2-light: #f5ebe4;
             --green: #5a8a72;
             --green-light: #e4f0ea;
-            --line: #e4e2da;
+            --blue: #4a7fa5;
+            --blue-light: #e4eef5;
             --white: #ffffff;
         }
 
@@ -340,9 +341,14 @@
             width: fit-content;
         }
 
-        .tag-violet     { color: var(--accent-dark); background: var(--accent-light); }
-        .tag-terracotta { color: #9a4e25; background: var(--accent2-light); }
-        .tag-sage       { color: #2d6650; background: var(--green-light); }
+        .app-card.blue::before { background: linear-gradient(90deg, var(--blue), #7aafc5); }
+        .app-card.blue .card-arrow { color: var(--blue); }
+        .tag-blue { color: #1e4f72; background: var(--blue-light); }
+        .app-card.coming-soon {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: default;
+        }
 
         .card-title {
             font-size: 0.97rem;
@@ -415,7 +421,7 @@
                 </p>
             </div>
             <div class="badge">
-                <div class="badge-num">3</div>
+                <div class="badge-num">5</div>
                 <div class="badge-label">TOOLS</div>
             </div>
         </div>
@@ -449,9 +455,9 @@
         </div>
 
         <div class="section-header">
-            <span class="section-title">🗂 ツール一覧</span>
+            <span class="section-title">📖 国語のツール</span>
             <div class="section-line"></div>
-            <span class="section-count">3 TOOLS</span>
+            <span class="section-count">5 TOOLS</span>
         </div>
 
         <div class="apps-grid">
@@ -476,6 +482,30 @@
                 <p class="card-desc">中学1年生向けの精読プリント第2弾。読解力・記述力をさらに深めます。</p>
                 <span class="card-arrow">開く →</span>
             </a>
+
+        </div>
+
+        <!-- コンピューターサイエンス -->
+        <div class="section-header" style="margin-top: 48px;">
+            <span class="section-title">💻 コンピューターサイエンス</span>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="apps-grid">
+
+            <a class="app-card blue" href="cs1/index.html">
+                <span class="card-tag tag-blue">💻 コンピューターサイエンス</span>
+                <p class="card-title">パソコンのしくみ その１</p>
+                <p class="card-desc">コンピューターの基本的な仕組みを学ぶ入門プリント。ハードウェアとソフトウェアの役割をわかりやすく解説します。</p>
+                <span class="card-arrow">開く →</span>
+            </a>
+
+            <div class="app-card blue coming-soon">
+                <span class="card-tag tag-blue">💻 コンピューターサイエンス</span>
+                <p class="card-title">パソコンのしくみ その２</p>
+                <p class="card-desc">準備中です。</p>
+                <span class="card-arrow">近日公開</span>
+            </div>
 
         </div>
 
