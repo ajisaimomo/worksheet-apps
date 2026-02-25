@@ -414,6 +414,29 @@
         .download-card .card-title { font-size: 0.97rem; font-weight: 700; color: var(--ink); line-height: 1.45; }
         .download-card .card-desc  { font-size: 0.845rem; color: var(--ink-light); line-height: 1.75; flex-grow: 1; }
 
+        .preview-img {
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            margin: 4px 0;
+            display: block;
+        }
+
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 0.82rem;
+            color: var(--ink-light);
+        }
+
+        .feature-list li::before {
+            content: '✓ ';
+            color: #a07830;
+            font-weight: 700;
+        }
+
         .download-personal-note {
             font-size: 0.78rem;
             color: var(--ink-light);
@@ -592,10 +615,17 @@
             <div class="download-card">
                 <span class="card-tag tag-amber">📅 学習サポート</span>
                 <p class="card-title">一日の計画テンプレート</p>
-                <p class="card-desc">
-                    一日のスケジュールを書き込めるHTMLテンプレートです。<br>
-                    ブラウザで開いて印刷するか、画面上でそのまま使えます。
-                </p>
+
+                <img class="preview-img" src="downloads/schedule_preview.png" alt="一日の計画テンプレートのプレビュー">
+
+                <p class="card-desc">HTMLファイルをダウンロードしてブラウザで開くだけで使えます。印刷にも対応。</p>
+
+                <ul class="feature-list">
+                    <li>達成率バー（チェックのたびにリアルタイム更新）</li>
+                    <li>週間レポート（カレンダー＋達成率グラフ）</li>
+                    <li>ブロックのドラッグ＆ドロップ並び替え</li>
+                </ul>
+
                 <div class="download-personal-note">
                     🛠️ 個人作成ツールです。授業・自習での個人利用のみOKです。
                 </div>
