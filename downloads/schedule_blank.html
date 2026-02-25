@@ -224,23 +224,113 @@
   }
   .modal-close-btn:hover { background: var(--line); }
 
+  /* ── DRAG HANDLE ── */
+  .block.dragging { opacity: 0.4; }
+  .block.drag-over-top { border-top: 3px solid var(--gold); }
+  .drag-handle {
+    position: absolute; left: -11mm; top: 50%; transform: translateY(-50%);
+    font-size: 11pt; color: #ccc; cursor: grab; user-select: none; padding: 2px 1px; z-index: 2;
+  }
+  .drag-handle:hover { color: var(--gold); }
+  .drag-handle:active { cursor: grabbing; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    width: 210mm; margin: 0 auto 6px;
+    background: white; border-radius: 12px; padding: 10px 16px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .progress-label { font-size: 11pt; font-weight: 700; color: var(--ink); white-space: nowrap; }
+  .progress-bar-bg { flex: 1; height: 14px; background: #e8e0d0; border-radius: 7px; overflow: hidden; }
+  .progress-bar-fill {
+    height: 100%; border-radius: 7px;
+    background: linear-gradient(to right, #4a7c59, #7ac47a);
+    transition: width 0.4s ease;
+  }
+  .progress-pct { font-size: 14pt; font-weight: 900; color: #4a7c59; width: 48px; text-align: right; }
+  .progress-celebrate { font-size: 13pt; }
+
+  /* ── REPORT MODAL ── */
+  .modal-overlay2 {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45); z-index: 300;
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal-overlay2.open { display: flex; }
+  .modal2 {
+    background: var(--bg); border-radius: 14px; padding: 22px;
+    width: 520px; max-width: 100%; max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .modal2-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--gold);
+  }
+  .modal2-title { font-family: 'Kaisei Decol', serif; font-size: 18pt; font-weight: 700; color: var(--ink); }
+  .modal2-close { background: none; border: none; font-size: 18pt; cursor: pointer; color: #8a7a62; }
+  .modal2-close:hover { color: var(--ink); }
+  .cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .cal-nav-btn { background: none; border: 1.5px solid var(--line); border-radius: 6px; padding: 4px 12px; cursor: pointer; font-size: 13pt; color: var(--ink); }
+  .cal-nav-btn:hover { background: var(--line); }
+  .cal-month { font-size: 14pt; font-weight: 700; color: var(--ink); }
+  .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; margin-bottom: 14px; }
+  .cal-dow { text-align: center; font-size: 8pt; color: #8a7a62; padding: 2px 0; font-weight: 700; }
+  .cal-day {
+    aspect-ratio: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    border-radius: 8px; font-size: 10pt; cursor: default; position: relative; gap: 2px;
+  }
+  .cal-day.has-data { cursor: pointer; background: #f0f9f3; }
+  .cal-day.has-data:hover { background: #d8f0e0; }
+  .cal-day.selected { background: #4a7c59 !important; color: white; }
+  .cal-day.today { border: 2px solid var(--gold); }
+  .cal-day.other-month { color: #ccc; }
+  .cal-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .detail-panel { background: white; border-radius: 10px; padding: 14px; border: 1.5px solid var(--line); }
+  .detail-date { font-size: 12pt; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+  .detail-summary { display: flex; align-items: center; gap: 12px; background: var(--ink); color: #fdf8ee; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; }
+  .detail-big { font-size: 28pt; font-weight: 900; color: #f0d080; line-height: 1; }
+  .detail-sub { font-size: 10pt; color: #c8baa0; }
+  .detail-goal { font-size: 11pt; font-style: italic; color: #8a7a62; margin-bottom: 10px; }
+  .detail-block { margin-bottom: 8px; }
+  .detail-block-title { font-size: 10pt; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .detail-task { font-size: 9.5pt; color: #666; padding-left: 8px; margin-bottom: 2px; display: flex; gap: 6px; }
+  .week-section { margin-top: 14px; }
+  .week-title { font-size: 10pt; font-weight: 700; color: #8a7a62; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .day-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .day-label { font-size: 9.5pt; width: 56px; flex-shrink: 0; color: var(--ink); }
+  .day-bar-bg { flex: 1; height: 14px; background: #e8e0d0; border-radius: 7px; overflow: hidden; }
+  .day-bar-fill { height: 100%; border-radius: 7px; transition: width 0.4s; }
+  .day-pct { font-size: 9.5pt; width: 32px; text-align: right; font-weight: 700; }
+
   /* PRINT */
   @media print {
     body { background: white; padding: 0; }
-    .topbar, .save-status { display: none !important; }
+    .topbar, .save-status, .progress-wrap { display: none !important; }
     .page { box-shadow: none; margin: 0; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     input { border-color: inherit !important; }
+    .drag-handle { display: none !important; }
   }
 </style>
 </head>
 <body>
+
+<!-- Progress Bar -->
+<div class="progress-wrap" id="progressWrap">
+  <span class="progress-label">今日の達成率</span>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+  <span class="progress-pct" id="progressPct">0%</span>
+  <span class="progress-celebrate" id="progressCelebrate"></span>
+</div>
 
 <!-- Top Bar -->
 <div class="topbar">
   <span class="topbar-date" id="todayLabel"></span>
   <button class="btn btn-gold" onclick="saveToday()">💾 今日の内容を保存</button>
   <button class="btn btn-green" onclick="openLoadModal()">📂 過去の計画を読み込む</button>
+  <button class="btn" style="background:#7055b0" onclick="openReport()">📊 週間レポート</button>
   <button class="btn btn-sky" onclick="exportJSON()">⬇️ JSONで書き出し</button>
   <label class="btn" style="cursor:pointer">
     ⬆️ JSONを読み込む
@@ -277,7 +367,7 @@
   <div class="timeline">
 
     <div class="block" style="--accent-color:#c45528">
-      <div class="block-dot"></div>
+      <div class="drag-handle" title="ドラッグして並び替え">⠿</div><div class="block-dot"></div>
       <div class="block-card">
         <div class="block-top">
           <span class="block-emoji">🐈‍⬛</span>
@@ -292,7 +382,7 @@
     </div>
 
     <div class="block" style="--accent-color:#b8892a">
-      <div class="block-dot"></div>
+      <div class="drag-handle" title="ドラッグして並び替え">⠿</div><div class="block-dot"></div>
       <div class="block-card">
         <div class="block-top">
           <span class="block-emoji">🐾</span>
@@ -307,7 +397,7 @@
     </div>
 
     <div class="block" style="--accent-color:#3278a8">
-      <div class="block-dot"></div>
+      <div class="drag-handle" title="ドラッグして並び替え">⠿</div><div class="block-dot"></div>
       <div class="block-card">
         <div class="block-top">
           <span class="block-emoji">🐈‍⬛</span>
@@ -322,7 +412,7 @@
     </div>
 
     <div class="block" style="--accent-color:#7055b0">
-      <div class="block-dot"></div>
+      <div class="drag-handle" title="ドラッグして並び替え">⠿</div><div class="block-dot"></div>
       <div class="block-card">
         <div class="block-top">
           <span class="block-emoji">🐾</span>
@@ -337,7 +427,7 @@
     </div>
 
     <div class="block" style="--accent-color:#c45528">
-      <div class="block-dot"></div>
+      <div class="drag-handle" title="ドラッグして並び替え">⠿</div><div class="block-dot"></div>
       <div class="block-card">
         <div class="block-top">
           <span class="block-emoji">🐈‍⬛</span>
@@ -352,7 +442,7 @@
     </div>
 
     <div class="block" style="--accent-color:#e07b2a">
-      <div class="block-dot"></div>
+      <div class="drag-handle" title="ドラッグして並び替え">⠿</div><div class="block-dot"></div>
       <div class="block-card">
         <div class="block-top">
           <span class="block-emoji">🐾</span>
@@ -367,7 +457,7 @@
     </div>
 
     <div class="block" style="--accent-color:#4a7c59">
-      <div class="block-dot"></div>
+      <div class="drag-handle" title="ドラッグして並び替え">⠿</div><div class="block-dot"></div>
       <div class="block-card">
         <div class="block-top">
           <span class="block-emoji">🐈‍⬛</span>
@@ -397,8 +487,28 @@
   </div>
 </div>
 
+<!-- Report Modal -->
+<div class="modal-overlay2" id="reportModal">
+  <div class="modal2">
+    <div class="modal2-header">
+      <div class="modal2-title">📊 週間レポート</div>
+      <button class="modal2-close" onclick="closeReport()">✕</button>
+    </div>
+    <div class="cal-nav">
+      <button class="cal-nav-btn" onclick="calPrev()">◀</button>
+      <div class="cal-month" id="calMonthLabel"></div>
+      <button class="cal-nav-btn" onclick="calNext()">▶</button>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div id="detailPanel"></div>
+    <div class="week-section">
+      <div class="week-title">📅 直近7日間の達成率</div>
+      <div id="weekBars"></div>
+    </div>
+  </div>
+</div>
+
 <script>
-  // ── フィールドID一覧 ──
   const TEXT_IDS = [
     'f_goal','f_memo1','f_memo2',
     'f_t1','f_ti1','f_w1a','f_w1b',
@@ -417,16 +527,33 @@
   ];
 
   function todayStr() {
-    return new Date().toLocaleDateString('ja-JP', {year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\//g,'-');
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
   }
 
-  // 今日の日付ラベル
   document.getElementById('todayLabel').textContent =
     new Date().toLocaleDateString('ja-JP', {year:'numeric',month:'long',day:'numeric',weekday:'long'});
 
+  // ── 達成率バー ──
+  function updateProgress() {
+    const cbs = document.querySelectorAll('.cb-row input[type="checkbox"]');
+    const total = cbs.length;
+    const done = [...cbs].filter(c => c.checked).length;
+    const pct = total === 0 ? 0 : Math.round(done / total * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('progressCelebrate').textContent =
+      pct === 100 ? '🎉' : pct >= 80 ? '✨' : pct >= 50 ? '👍' : '';
+    // 色
+    const fill = document.getElementById('progressFill');
+    fill.style.background = pct === 100 ? 'linear-gradient(to right,#f0d080,#e0a030)'
+      : pct >= 50 ? 'linear-gradient(to right,#4a7c59,#7ac47a)'
+      : 'linear-gradient(to right,#c45528,#e07b2a)';
+  }
+
   // ── データ収集 ──
   function collectData() {
-    const data = { date: todayStr(), texts: {}, checks: {} };
+    const data = { date: todayStr(), texts: {}, checks: {}, blocks: [] };
     TEXT_IDS.forEach(id => {
       const el = document.getElementById(id);
       if (el) data.texts[id] = el.value;
@@ -435,10 +562,30 @@
       const el = document.getElementById(id);
       if (el) data.checks[id] = el.checked;
     });
+    // 詳細ブロック（項目ラベル保存）
+    for (let i = 1; i <= 7; i++) {
+      const time = document.getElementById('f_t'+i)?.value || '';
+      const title = document.getElementById('f_ti'+i)?.value || '';
+      const tasks = ['a','b'].map(s => ({
+        label: document.getElementById('f_w'+i+s)?.value || '',
+        done: document.getElementById('f_cb'+i+s)?.checked || false,
+      })).filter(t => t.label);
+      if (title || tasks.length) data.blocks.push({time, title, tasks});
+    }
+    // 達成数
+    const cbs = document.querySelectorAll('.cb-row input[type="checkbox"]');
+    const filled = [...cbs].filter(c => {
+      const idx = CB_IDS.indexOf(c.id);
+      if (idx < 0) return false;
+      const n = Math.ceil((idx+1)/2);
+      const s = idx%2===0?'a':'b';
+      return document.getElementById('f_w'+n+s)?.value;
+    });
+    data.totalItems = filled.length;
+    data.doneItems = filled.filter(c => c.checked).length;
     return data;
   }
 
-  // ── データ反映 ──
   function applyData(data) {
     if (data.texts) TEXT_IDS.forEach(id => {
       const el = document.getElementById(id);
@@ -448,136 +595,257 @@
       const el = document.getElementById(id);
       if (el && data.checks[id] !== undefined) el.checked = data.checks[id];
     });
+    updateProgress();
   }
 
-  // ── ローカル保存 ──
-  function getSaves() {
-    try { return JSON.parse(localStorage.getItem('schedule_saves') || '[]'); } catch { return []; }
-  }
-  function setSaves(arr) {
-    localStorage.setItem('schedule_saves', JSON.stringify(arr));
-  }
+  // ── 保存 ──
+  function getSaves() { try { return JSON.parse(localStorage.getItem('schedule_saves') || '[]'); } catch { return []; } }
+  function setSaves(arr) { localStorage.setItem('schedule_saves', JSON.stringify(arr)); }
 
   function saveToday() {
     const data = collectData();
     const saves = getSaves();
     const idx = saves.findIndex(s => s.date === data.date);
-    if (idx >= 0) saves[idx] = data;
-    else saves.unshift(data);
-    // 最大60件保持
+    if (idx >= 0) saves[idx] = data; else saves.unshift(data);
     setSaves(saves.slice(0, 60));
     showStatus('✅ 保存しました（' + data.date + '）');
   }
 
-  // 自動保存（入力のたびに）
+  // チェック・入力で自動保存＋達成率更新
+  document.querySelectorAll('.cb-row input[type="checkbox"]').forEach(el => {
+    el.addEventListener('change', () => { updateProgress(); saveToday(); });
+  });
   [...TEXT_IDS, ...CB_IDS].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener(el.type === 'checkbox' ? 'change' : 'input', saveToday);
+    if (el && el.type !== 'checkbox') el.addEventListener('input', saveToday);
   });
 
   // ── 読み込みモーダル ──
-  function openLoadModal() {
-    renderSaveList();
-    document.getElementById('loadModal').classList.add('open');
-  }
-  function closeLoadModal() {
-    document.getElementById('loadModal').classList.remove('open');
-  }
-  document.getElementById('loadModal').addEventListener('click', function(e) {
-    if (e.target === this) closeLoadModal();
-  });
+  function openLoadModal() { renderSaveList(); document.getElementById('loadModal').classList.add('open'); }
+  function closeLoadModal() { document.getElementById('loadModal').classList.remove('open'); }
+  document.getElementById('loadModal').addEventListener('click', function(e) { if(e.target===this) closeLoadModal(); });
 
   function renderSaveList() {
     const saves = getSaves();
     const list = document.getElementById('saveList');
-    if (saves.length === 0) {
-      list.innerHTML = '<div class="modal-empty">まだ保存されたデータがありません🐾</div>';
-      return;
-    }
-    list.innerHTML = saves.map((s, i) => `
+    if (!saves.length) { list.innerHTML = '<div class="modal-empty">まだ保存されたデータがありません🐾</div>'; return; }
+    list.innerHTML = saves.map((s,i) => `
       <div class="save-item" onclick="loadSave(${i})">
         <div class="save-item-date">📅 ${s.date}</div>
-        <div class="save-item-goal">${s.texts?.f_goal || '（目当てなし）'}</div>
+        <div class="save-item-goal">${s.texts?.f_goal||'（目当てなし）'}</div>
         <button class="save-item-del" onclick="deleteSave(event,${i})">✕</button>
-      </div>
-    `).join('');
+      </div>`).join('');
   }
-
   function loadSave(i) {
-    const saves = getSaves();
-    if (saves[i]) {
-      applyData(saves[i]);
-      closeLoadModal();
-      showStatus('📂 ' + saves[i].date + ' のデータを読み込みました');
-    }
+    const s = getSaves()[i];
+    if (s) { applyData(s); closeLoadModal(); showStatus('📂 '+s.date+' のデータを読み込みました'); }
   }
-
-  function deleteSave(e, i) {
+  function deleteSave(e,i) {
     e.stopPropagation();
-    if (!confirm('このデータを削除しますか？')) return;
-    const saves = getSaves();
-    saves.splice(i, 1);
-    setSaves(saves);
-    renderSaveList();
+    if (!confirm('削除しますか？')) return;
+    const saves = getSaves(); saves.splice(i,1); setSaves(saves); renderSaveList();
   }
 
-  // ── JSON書き出し（Googleドライブ共有用） ──
+  // ── JSON書き出し・読み込み ──
   function exportJSON() {
-    const saves = getSaves();
-    const blob = new Blob([JSON.stringify(saves, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(getSaves(),null,2)],{type:'application/json'});
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'schedule_data_' + todayStr() + '.json';
-    a.click();
+    const a = document.createElement('a'); a.href=url; a.download='schedule_data_'+todayStr()+'.json'; a.click();
     URL.revokeObjectURL(url);
-    showStatus('⬇️ JSONファイルを書き出しました。Googleドライブに保存してください。');
+    showStatus('⬇️ JSONを書き出しました');
   }
-
-  // ── JSON読み込み（別PCからの取り込み） ──
   function importJSON(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+    const file = event.target.files[0]; if (!file) return;
     const reader = new FileReader();
     reader.onload = function(e) {
       try {
         const imported = JSON.parse(e.target.result);
         if (!Array.isArray(imported)) throw new Error();
         const existing = getSaves();
-        // 日付重複は上書き、新しいものは追加
         imported.forEach(item => {
-          const idx = existing.findIndex(s => s.date === item.date);
-          if (idx >= 0) existing[idx] = item;
-          else existing.push(item);
+          const idx = existing.findIndex(s=>s.date===item.date);
+          if (idx>=0) existing[idx]=item; else existing.push(item);
         });
-        existing.sort((a,b) => b.date.localeCompare(a.date));
-        setSaves(existing.slice(0, 60));
-        showStatus('✅ ' + imported.length + '件のデータを取り込みました');
-        event.target.value = '';
-      } catch {
-        showStatus('⚠️ 読み込みに失敗しました。正しいJSONファイルか確認してください。');
-      }
+        existing.sort((a,b)=>b.date.localeCompare(a.date));
+        setSaves(existing.slice(0,60));
+        showStatus('✅ '+imported.length+'件取り込みました');
+        event.target.value='';
+      } catch { showStatus('⚠️ 読み込みに失敗しました'); }
     };
     reader.readAsText(file);
   }
 
-  // ── ステータス表示 ──
   function showStatus(msg) {
     const el = document.getElementById('saveStatus');
-    el.textContent = msg;
-    clearTimeout(el._t);
-    el._t = setTimeout(() => { el.textContent = ''; }, 4000);
+    el.textContent = msg; clearTimeout(el._t);
+    el._t = setTimeout(()=>{ el.textContent=''; }, 4000);
   }
 
-  // ── 起動時に今日のデータを復元 ──
+  // ── 週間レポート ──
+  let calYear, calMonth, selectedDate = null;
+
+  function openReport() {
+    const now = new Date();
+    calYear = now.getFullYear(); calMonth = now.getMonth();
+    selectedDate = null;
+    document.getElementById('reportModal').classList.add('open');
+    renderCalendar(); renderWeekBars(); renderDetail(null);
+  }
+  function closeReport() { document.getElementById('reportModal').classList.remove('open'); }
+  document.getElementById('reportModal').addEventListener('click', function(e){ if(e.target===this) closeReport(); });
+
+  function calPrev() { calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
+  function calNext() { calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); }
+
+  function renderCalendar() {
+    const saves = getSaves();
+    const label = calYear+'年'+(calMonth+1)+'月';
+    document.getElementById('calMonthLabel').textContent = label;
+    const grid = document.getElementById('calGrid');
+    const dows = ['月','火','水','木','金','土','日'];
+    let html = dows.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+    const first = new Date(calYear, calMonth, 1);
+    let startDow = first.getDay(); // 0=日
+    startDow = startDow === 0 ? 6 : startDow - 1; // 月曜始まり
+    const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+    const todayS = todayStr();
+    for (let i = 0; i < startDow; i++) html += '<div class="cal-day other-month"></div>';
+    for (let d = 1; d <= daysInMonth; d++) {
+      const ds = calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+      const save = saves.find(s=>s.date===ds);
+      const isToday = ds===todayS;
+      const isSel = ds===selectedDate;
+      let pct = null;
+      if (save) {
+        if (save.totalItems > 0) pct = Math.round(save.doneItems/save.totalItems*100);
+        else { const cbs = Object.values(save.checks||{}); pct = cbs.length?Math.round(cbs.filter(Boolean).length/cbs.length*100):0; }
+      }
+      const dotColor = pct===null?'':pct>=80?'#4a7c59':pct>=50?'#b8892a':'#c45528';
+      html += `<div class="cal-day${save?' has-data':''}${isToday?' today':''}${isSel?' selected':''}"
+        ${save?`onclick="selectDate('${ds}')"`:''}>
+        <span>${d}</span>
+        ${save?`<div class="cal-dot" style="background:${dotColor}"></div>`:''}
+      </div>`;
+    }
+    grid.innerHTML = html;
+  }
+
+  function selectDate(ds) {
+    selectedDate = ds;
+    renderCalendar();
+    renderDetail(ds);
+  }
+
+  function renderDetail(ds) {
+    const panel = document.getElementById('detailPanel');
+    if (!ds) { panel.innerHTML = ''; return; }
+    const save = getSaves().find(s=>s.date===ds);
+    if (!save) { panel.innerHTML = ''; return; }
+    let pct, done, total;
+    if (save.totalItems > 0) {
+      done = save.doneItems; total = save.totalItems;
+    } else {
+      const cbs = Object.values(save.checks||{});
+      done = cbs.filter(Boolean).length; total = cbs.length;
+    }
+    pct = total ? Math.round(done/total*100) : 0;
+    let blocksHtml = '';
+    (save.blocks||[]).forEach(b => {
+      if (!b.title && !b.tasks?.length) return;
+      blocksHtml += `<div class="detail-block">
+        <div class="detail-block-title">${b.time?b.time+' ':''}${b.title}</div>
+        ${(b.tasks||[]).map(t=>`<div class="detail-task${t.done?' done':''}">
+          ${t.done?'☑':'☐'} <span>${t.label}</span>
+        </div>`).join('')}
+      </div>`;
+    });
+    panel.innerHTML = `<div class="detail-panel">
+      <div class="detail-date">📅 ${ds}</div>
+      <div class="detail-summary">
+        <div><div class="detail-big">${pct}%</div><div class="detail-sub">${done}/${total} 項目達成</div></div>
+      </div>
+      ${save.texts?.f_goal?`<div class="detail-goal">🎯 "${save.texts.f_goal}"</div>`:''}
+      ${blocksHtml}
+    </div>`;
+  }
+
+  function renderWeekBars() {
+    const saves = getSaves();
+    const dayNames = ['日','月','火','水','木','金','土'];
+    let html = '';
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate()-i);
+      const ds = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+      const label = (d.getMonth()+1)+'/'+d.getDate()+'（'+dayNames[d.getDay()]+'）';
+      const save = saves.find(s=>s.date===ds);
+      let pct = null;
+      if (save) {
+        if (save.totalItems>0) pct=Math.round(save.doneItems/save.totalItems*100);
+        else { const cbs=Object.values(save.checks||{}); pct=cbs.length?Math.round(cbs.filter(Boolean).length/cbs.length*100):0; }
+      }
+      const color = pct===null?'#ccc':pct>=80?'#4a7c59':pct>=50?'#b8892a':'#c45528';
+      const isToday = i===0;
+      html += `<div class="day-row">
+        <div class="day-label" style="${isToday?'font-weight:700;color:var(--gold)':''}">${label}</div>
+        <div class="day-bar-bg"><div class="day-bar-fill" style="width:${pct??0}%;background:${color}"></div></div>
+        <div class="day-pct" style="color:${color}">${pct!==null?pct+'%':'-'}</div>
+      </div>`;
+    }
+    document.getElementById('weekBars').innerHTML = html;
+  }
+
+  // ── ドラッグ＆ドロップ ──
+  let dragSrc = null;
+  function initDrag() {
+    document.querySelectorAll('.drag-handle').forEach(handle => {
+      handle.addEventListener('mousedown', function(e) {
+        const block = handle.closest('.block');
+        block.setAttribute('draggable','true');
+        block.addEventListener('dragstart', onDragStart);
+        block.addEventListener('dragend', onDragEnd);
+      });
+    });
+    const timeline = document.querySelector('.timeline');
+    timeline.addEventListener('dragover', onDragOver);
+    timeline.addEventListener('drop', onDrop);
+  }
+  function onDragStart(e) {
+    dragSrc = this; this.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  }
+  function onDragEnd(e) {
+    this.classList.remove('dragging');
+    document.querySelectorAll('.block').forEach(b=>b.classList.remove('drag-over-top'));
+    this.setAttribute('draggable','false');
+  }
+  function onDragOver(e) {
+    e.preventDefault(); e.dataTransfer.dropEffect='move';
+    const block = e.target.closest('.block');
+    document.querySelectorAll('.block').forEach(b=>b.classList.remove('drag-over-top'));
+    if (block && block !== dragSrc) block.classList.add('drag-over-top');
+  }
+  function onDrop(e) {
+    e.preventDefault();
+    const target = e.target.closest('.block');
+    if (!target || target === dragSrc) return;
+    const timeline = document.querySelector('.timeline');
+    const blocks = [...timeline.querySelectorAll(':scope > .block')];
+    const fromIdx = blocks.indexOf(dragSrc);
+    const toIdx = blocks.indexOf(target);
+    if (fromIdx < toIdx) target.after(dragSrc); else target.before(dragSrc);
+    document.querySelectorAll('.block').forEach(b=>b.classList.remove('drag-over-top'));
+    saveToday();
+  }
+
+  // ── 起動 ──
   (function() {
     const saves = getSaves();
-    const today = saves.find(s => s.date === todayStr());
-    if (today) {
-      applyData(today);
-      showStatus('📂 今日の保存データを読み込みました');
-    }
+    const today = saves.find(s=>s.date===todayStr());
+    if (today) { applyData(today); showStatus('📂 今日の保存データを読み込みました'); }
+    updateProgress();
+    initDrag();
   })();
 </script>
+
 </body>
 </html>
