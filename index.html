@@ -23,8 +23,7 @@
             --accent2-light: #f5ebe4;
             --green: #5a8a72;
             --green-light: #e4f0ea;
-            --blue: #4a7fa5;
-            --blue-light: #e4eef5;
+            --line: #e4e2da;
             --white: #ffffff;
         }
 
@@ -341,14 +340,9 @@
             width: fit-content;
         }
 
-        .app-card.blue::before { background: linear-gradient(90deg, var(--blue), #7aafc5); }
-        .app-card.blue .card-arrow { color: var(--blue); }
-        .tag-blue { color: #1e4f72; background: var(--blue-light); }
-        .app-card.coming-soon {
-            opacity: 0.5;
-            pointer-events: none;
-            cursor: default;
-        }
+        .tag-violet     { color: var(--accent-dark); background: var(--accent-light); }
+        .tag-terracotta { color: #9a4e25; background: var(--accent2-light); }
+        .tag-sage       { color: #2d6650; background: var(--green-light); }
 
         .card-title {
             font-size: 0.97rem;
@@ -373,6 +367,82 @@
         .app-card.violet .card-arrow     { color: var(--accent); }
         .app-card.terracotta .card-arrow { color: var(--accent2); }
         .app-card.sage .card-arrow       { color: var(--green); }
+        .app-card.blue .card-arrow       { color: #4a7fa5; }
+        .app-card.amber .card-arrow      { color: #a07830; }
+
+        /* 青・琥珀色カード */
+        :root {
+            --blue: #4a7fa5;
+            --blue-light: #e4eef5;
+            --amber: #a07830;
+            --amber-light: #f5f0e4;
+        }
+
+        .app-card.blue::before  { background: linear-gradient(90deg, #4a7fa5, #7aafc5); }
+        .app-card.amber::before { background: linear-gradient(90deg, #a07830, #c9a85a); }
+        .tag-blue  { color: #1e4f72; background: #e4eef5; }
+        .tag-amber { color: #6b4f10; background: #f5f0e4; }
+
+        /* 準備中カード */
+        .app-card.coming-soon {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* ダウンロードカード */
+        .download-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 26px 24px;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #a07830, #c9a85a);
+        }
+
+        .download-card .card-title { font-size: 0.97rem; font-weight: 700; color: var(--ink); line-height: 1.45; }
+        .download-card .card-desc  { font-size: 0.845rem; color: var(--ink-light); line-height: 1.75; flex-grow: 1; }
+
+        .download-personal-note {
+            font-size: 0.78rem;
+            color: var(--ink-light);
+            background: #f5f0e4;
+            border-radius: 6px;
+            padding: 8px 12px;
+            line-height: 1.6;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #a07830;
+            color: white;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 10px 18px;
+            border-radius: 6px;
+            margin-top: 4px;
+            width: fit-content;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .download-btn:hover {
+            background: #7a5c20;
+            transform: translateY(-1px);
+        }
 
         footer {
             border-top: 1px solid var(--line);
@@ -421,7 +491,7 @@
                 </p>
             </div>
             <div class="badge">
-                <div class="badge-num">5</div>
+                <div class="badge-num">6</div>
                 <div class="badge-label">TOOLS</div>
             </div>
         </div>
@@ -457,7 +527,7 @@
         <div class="section-header">
             <span class="section-title">📖 国語のツール</span>
             <div class="section-line"></div>
-            <span class="section-count">5 TOOLS</span>
+            <span class="section-count">3 TOOLS</span>
         </div>
 
         <div class="apps-grid">
@@ -486,34 +556,60 @@
         </div>
 
         <!-- コンピューターサイエンス -->
-        <div class="section-header" style="margin-top: 48px;">
+        <div class="section-header" style="margin-top: 52px;">
             <span class="section-title">💻 コンピューターサイエンス</span>
             <div class="section-line"></div>
+            <span class="section-count">2 TOOLS</span>
         </div>
 
         <div class="apps-grid">
-
             <a class="app-card blue" href="cs1/index.html">
                 <span class="card-tag tag-blue">💻 コンピューターサイエンス</span>
                 <p class="card-title">パソコンのしくみ その１</p>
                 <p class="card-desc">コンピューターの基本的な仕組みを学ぶ入門プリント。ハードウェアとソフトウェアの役割をわかりやすく解説します。</p>
                 <span class="card-arrow">開く →</span>
             </a>
-
             <div class="app-card blue coming-soon">
                 <span class="card-tag tag-blue">💻 コンピューターサイエンス</span>
                 <p class="card-title">パソコンのしくみ その２</p>
                 <p class="card-desc">準備中です。</p>
                 <span class="card-arrow">近日公開</span>
             </div>
+        </div>
 
+        <!-- ダウンロード -->
+        <div class="section-header" style="margin-top: 52px;">
+            <span class="section-title">⬇️ ダウンロードして使うツール</span>
+            <div class="section-line"></div>
+            <span class="section-count">1 FILE</span>
+        </div>
+
+        <div style="background: #fdf8f0; border: 1px solid #e8dfc8; border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; font-size: 0.845rem; color: var(--ink-light); line-height: 1.7;">
+            ⚠️ <strong style="color: var(--ink);">このセクションについて：</strong>ファイルをダウンロードして、ご自身のPCのブラウザで開いてご使用ください。個人が作成したものです。無断転載・再配布はご遠慮ください。
+        </div>
+
+        <div class="apps-grid">
+            <div class="download-card">
+                <span class="card-tag tag-amber">📅 学習サポート</span>
+                <p class="card-title">一日の計画テンプレート</p>
+                <p class="card-desc">
+                    一日のスケジュールを書き込めるHTMLテンプレートです。<br>
+                    ブラウザで開いて印刷するか、画面上でそのまま使えます。
+                </p>
+                <div class="download-personal-note">
+                    🛠️ 個人作成ツールです。授業・自習での個人利用のみOKです。
+                </div>
+                <a class="download-btn" href="downloads/schedule_blank.html" download>
+                    ⬇️ ダウンロード
+                </a>
+            </div>
         </div>
 
     </main>
 
     <footer>
         © 2025 学習ツール室 ― Middle School Worksheet Studio<br>
-        <span style="font-size:11px; opacity:0.7;">最終更新：2025年6月</span>
+        <span style="font-size:11px; opacity:0.7;">最終更新：2026年2月</span>
     </footer>
 
 </body>
