@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>50音タイピング練習</title>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&family=Noto+Sans+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:     #0f0f1a;
+            --card:   rgba(255,255,255,0.05);
+            --border: rgba(255,255,255,0.1);
+            --gold:   #ffd60a;
+            --red:    #e63946;
+            --c-boin:      #ff8c00;
+            --c-gyou:      #4cc9f0;
+            --c-dakuon:    #a855f7;
+            --c-tokubetsu: #4ade80;
+            --c-nobashi:   #f72585;
+            --c-gairai:    #00b4d8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--bg);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background:
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.013) 0,rgba(255,255,255,0.013) 1px,transparent 1px,transparent 60px),
+                repeating-linear-gradient(0deg,  rgba(255,255,255,0.013) 0,rgba(255,255,255,0.013) 1px,transparent 1px,transparent 60px);
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ===== 画面管理 ===== */
+        .screen {
+            display: none; min-height: 100vh; position: relative; z-index: 1;
+            flex-direction: column; align-items: center; justify-content: center;
+            padding: 24px 16px;
+        }
+        .screen.active { display: flex; }
+
+        /* ===== 共通 ===== */
+        .page-header {
+            position: absolute; top: 0; left: 0; right: 0;
+            display: flex; align-items: center; gap: 12px; padding: 14px 18px;
+        }
+        .btn-back {
+            background: transparent;
+            border: 1.5px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.6);
+            padding: 7px 14px; border-radius: 6px;
+            cursor: pointer; font-size: 13px;
+            font-family: 'Noto Sans JP', sans-serif;
+            transition: all 0.15s;
+        }
+        .btn-back:hover { border-color: white; color: white; }
+        .page-label {
+            font-size: 12px; letter-spacing: 3px;
+            color: rgba(255,255,255,0.35); font-weight: 700;
+        }
+
+        /* ===== タイトル ===== */
+        .title-logo { text-align: center; margin-bottom: 44px; }
+        .title-icon { font-size: 52px; margin-bottom: 14px; }
+        .title-main {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 400;
+            font-size: clamp(38px, 9vw, 76px);
+            line-height: 1.2;
+        }
+        .title-line1 {
+            display: block;
+            background: linear-gradient(90deg,#ff8c00,#ffb700);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 14px rgba(255,140,0,0.5));
+        }
+        .title-line2 {
+            display: block;
+            background: linear-gradient(90deg,#ff4d4d,#ff2060);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 14px rgba(255,50,80,0.5));
+        }
+        .title-sub {
+            font-size: 13px; color: rgba(255,255,255,0.38);
+            letter-spacing: 2px; margin-top: 10px;
+        }
+
+        /* タイトルボタン 2行 */
+        .title-btn-wrap { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 400px; }
+        .btn-row { display: flex; gap: 10px; justify-content: center; }
+        .btn-mode {
+            flex: 1; max-width: 120px;
+            padding: 16px 8px;
+            border: none; border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 17px; font-weight: 900;
+            letter-spacing: 2px;
+            color: #0f0f1a;
+            transition: all 0.15s;
+        }
+        .btn-mode:active { transform: scale(0.95); }
+        .btn-mode:hover { transform: translateY(-2px); }
+
+        .c-boin-btn      { background: linear-gradient(135deg,#ff8c00,#e6a817); box-shadow: 0 3px 16px rgba(255,140,0,0.4); }
+        .c-gyou-btn      { background: linear-gradient(135deg,#4cc9f0,#3a86ff); box-shadow: 0 3px 16px rgba(76,201,240,0.4); }
+        .c-dakuon-btn    { background: linear-gradient(135deg,#a855f7,#7c3aed); color: white; box-shadow: 0 3px 16px rgba(168,85,247,0.4); }
+        .c-tokubetsu-btn { background: linear-gradient(135deg,#4ade80,#16a34a); box-shadow: 0 3px 16px rgba(74,222,128,0.4); }
+        .c-nobashi-btn   { background: linear-gradient(135deg,#f72585,#b5179e); color: white; box-shadow: 0 3px 16px rgba(247,37,133,0.4); }
+        .c-gairai-btn    { background: linear-gradient(135deg,#00b4d8,#0077b6); color: white; box-shadow: 0 3px 16px rgba(0,180,216,0.4); }
+
+        /* ===== 選択画面 ===== */
+        #screen-select { justify-content: flex-start; padding-top: 80px; }
+        .select-heading { text-align: center; margin-bottom: 20px; }
+        .select-heading h2 { font-size: 19px; font-weight: 900; margin-bottom: 4px; }
+        .select-heading p  { font-size: 12px; color: rgba(255,255,255,0.38); }
+
+        .select-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px; width: 100%; max-width: 460px;
+        }
+        .select-btn {
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: 12px; padding: 16px 14px;
+            cursor: pointer; transition: all 0.2s;
+            text-align: left; color: white;
+            font-family: 'Noto Sans JP', sans-serif; width: 100%;
+        }
+        .select-btn:hover { background: rgba(255,255,255,0.09); transform: translateY(-2px); }
+        .sn  { font-family:'Zen Dots',cursive; font-size:10px; letter-spacing:2px; margin-bottom:8px; }
+        .sm  { font-size:20px; font-weight:900; margin-bottom:4px; }
+        .sk  { font-family:'Noto Sans Mono',monospace; font-size:11px; color:rgba(255,255,255,0.38); }
+
+        /* まとめてボタン（1列全幅） */
+        .btn-matomete {
+            grid-column: 1 / -1;
+            background: rgba(255,255,255,0.07);
+            border: 1.5px dashed rgba(255,255,255,0.2);
+            border-radius: 12px; padding: 14px;
+            cursor: pointer; color: white;
+            font-family:'Noto Sans JP',sans-serif;
+            font-size:16px; font-weight:900;
+            letter-spacing:3px; text-align:center;
+            transition: all 0.2s; width:100%;
+        }
+        .btn-matomete:hover { background:rgba(255,255,255,0.12); transform:translateY(-1px); }
+
+        /* モード別ボーダー色 */
+        .mode-boin      .select-btn { border-color:rgba(255,140,0,0.3); }
+        .mode-boin      .select-btn:hover { border-color:var(--c-boin); }
+        .mode-boin      .sn { color:var(--c-boin); }
+        .mode-gyou      .select-btn { border-color:rgba(76,201,240,0.3); }
+        .mode-gyou      .select-btn:hover { border-color:var(--c-gyou); }
+        .mode-gyou      .sn { color:var(--c-gyou); }
+        .mode-dakuon    .select-btn { border-color:rgba(168,85,247,0.3); }
+        .mode-dakuon    .select-btn:hover { border-color:var(--c-dakuon); }
+        .mode-dakuon    .sn { color:var(--c-dakuon); }
+        .mode-tokubetsu .select-btn { border-color:rgba(74,222,128,0.3); }
+        .mode-tokubetsu .select-btn:hover { border-color:var(--c-tokubetsu); }
+        .mode-tokubetsu .sn { color:var(--c-tokubetsu); }
+        .mode-nobashi   .select-btn { border-color:rgba(247,37,133,0.3); }
+        .mode-nobashi   .select-btn:hover { border-color:var(--c-nobashi); }
+        .mode-nobashi   .sn { color:var(--c-nobashi); }
+        .mode-gairai    .select-btn { border-color:rgba(0,180,216,0.3); }
+        .mode-gairai    .select-btn:hover { border-color:var(--c-gairai); }
+        .mode-gairai    .sn { color:var(--c-gairai); }
+
+        /* ===== ゲーム画面 ===== */
+        #screen-game { justify-content: flex-start; padding-top: 72px; }
+
+        .game-top {
+            position:absolute; top:0; left:0; right:0;
+            display:flex; align-items:center; gap:10px; padding:13px 18px;
+        }
+        .game-badge {
+            font-family:'Zen Dots',cursive; font-size:11px;
+            letter-spacing:2px; padding:4px 12px; border-radius:20px;
+            color:#0f0f1a;
+        }
+        .gb-boin      { background:var(--c-boin); }
+        .gb-gyou      { background:var(--c-gyou); }
+        .gb-dakuon    { background:var(--c-dakuon); color:white; }
+        .gb-tokubetsu { background:var(--c-tokubetsu); }
+        .gb-nobashi   { background:var(--c-nobashi); color:white; }
+        .gb-gairai    { background:var(--c-gairai);  color:white; }
+
+        .game-prog {
+            margin-left:auto;
+            font-family:'Noto Sans Mono',monospace;
+            font-size:13px; color:rgba(255,255,255,0.38);
+        }
+
+        /* キャラカード */
+        .char-card {
+            background:var(--card);
+            border:1px solid var(--border);
+            border-radius:20px;
+            width:100%; max-width:440px;
+            padding:32px 28px 24px;
+            text-align:center; margin-bottom:18px;
+        }
+        .char-context {
+            font-size:11px; letter-spacing:3px;
+            color:rgba(255,255,255,0.28); font-weight:700; margin-bottom:10px;
+        }
+        .char-display {
+            font-weight:900; line-height:1.1;
+            margin-bottom:6px;
+            transition: font-size 0.1s;
+        }
+        .size-lg  { font-size:76px; }
+        .size-md  { font-size:48px; }
+        .size-sm  { font-size:34px; }
+        .size-xs  { font-size:26px; }
+
+        /* のばし漢字表示 */
+        .char-kanji {
+            font-size: 22px;
+            color: rgba(255,255,255,0.55);
+            letter-spacing: 3px;
+            margin-bottom: 6px;
+            min-height: 28px;
+            font-weight: 700;
+        }
+
+        /* ローマ字ボックス */
+        .romaji-wrap { width:100%; max-width:440px; margin-bottom:14px; }
+        .romaji-display {
+            display:flex; justify-content:center;
+            gap:6px; flex-wrap:wrap;
+            min-height:54px; align-items:center;
+        }
+        .r-box {
+            height:52px;
+            border:2px solid rgba(255,255,255,0.12);
+            border-radius:7px;
+            display:flex; align-items:center; justify-content:center;
+            font-family:'Noto Sans Mono',monospace;
+            font-weight:700;
+            color:rgba(255,255,255,0.15);
+            background:rgba(255,255,255,0.03);
+            transition:all 0.1s;
+        }
+        .r-box-wide { width:44px; font-size:22px; }
+        .r-box-narrow { width:36px; font-size:18px; }
+
+        .r-box.typed {
+            color:white;
+            border-color:rgba(255,255,255,0.4);
+            background:rgba(255,255,255,0.07);
+        }
+        .r-box.cur-boin      { border-color:var(--c-boin);      background:rgba(255,140,0,0.1);   box-shadow:0 0 10px rgba(255,140,0,0.3);   color:rgba(255,255,255,0.5); }
+        .r-box.cur-gyou      { border-color:var(--c-gyou);      background:rgba(76,201,240,0.1);  box-shadow:0 0 10px rgba(76,201,240,0.3);  color:rgba(255,255,255,0.5); }
+        .r-box.cur-dakuon    { border-color:var(--c-dakuon);    background:rgba(168,85,247,0.1);  box-shadow:0 0 10px rgba(168,85,247,0.3);  color:rgba(255,255,255,0.5); }
+        .r-box.cur-tokubetsu { border-color:var(--c-tokubetsu); background:rgba(74,222,128,0.1);  box-shadow:0 0 10px rgba(74,222,128,0.3);  color:rgba(255,255,255,0.5); }
+        .r-box.cur-nobashi   { border-color:var(--c-nobashi);   background:rgba(247,37,133,0.1);  box-shadow:0 0 10px rgba(247,37,133,0.3);  color:rgba(255,255,255,0.5); }
+        .r-box.cur-gairai    { border-color:var(--c-gairai);    background:rgba(0,180,216,0.1);   box-shadow:0 0 10px rgba(0,180,216,0.3);   color:rgba(255,255,255,0.5); }
+        .r-box.wrong {
+            border-color:var(--red);
+            background:rgba(230,57,70,0.15);
+            animation:shake 0.3s ease;
+        }
+        @keyframes shake {
+            0%,100% { transform:translateX(0); }
+            25%     { transform:translateX(-5px); }
+            75%     { transform:translateX(5px); }
+        }
+        @keyframes cardPop {
+            0%,100% { transform:scale(1); }
+            40%     { transform:scale(1.04); }
+        }
+        .char-card.pop { animation:cardPop 0.32s ease; }
+
+        /* ===== 紙吹雪パーティクル ===== */
+        .confetti-piece {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            font-size: 18px;
+            animation: confettiFly var(--dur) ease-out forwards;
+        }
+        @keyframes confettiFly {
+            0%   { transform: translate(0,0) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.3); opacity: 0; }
+        }
+
+        /* ===== 花火キャンバス ===== */
+        #fireworks-canvas {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* ===== のばし絵文字 ===== */
+        .char-emoji {
+            font-size: 52px;
+            line-height: 1;
+            margin-bottom: 4px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 進捗ドット */
+        .progress-dots {
+            display:flex; gap:6px; justify-content:center;
+            margin-top:14px; flex-wrap:wrap; max-width:440px;
+        }
+        .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.14); transition:all 0.2s; }
+        .dot.done-boin       { background:var(--c-boin); }
+        .dot.done-gyou       { background:var(--c-gyou); }
+        .dot.done-dakuon     { background:var(--c-dakuon); }
+        .dot.done-tokubetsu  { background:var(--c-tokubetsu); }
+        .dot.done-nobashi    { background:var(--c-nobashi); }
+        .dot.done-gairai     { background:var(--c-gairai); }
+        .dot.act-boin        { background:var(--c-boin);      box-shadow:0 0 7px var(--c-boin);      transform:scale(1.4); }
+        .dot.act-gyou        { background:var(--c-gyou);      box-shadow:0 0 7px var(--c-gyou);      transform:scale(1.4); }
+        .dot.act-dakuon      { background:var(--c-dakuon);    box-shadow:0 0 7px var(--c-dakuon);    transform:scale(1.4); }
+        .dot.act-tokubetsu   { background:var(--c-tokubetsu); box-shadow:0 0 7px var(--c-tokubetsu); transform:scale(1.4); }
+        .dot.act-nobashi     { background:var(--c-nobashi);   box-shadow:0 0 7px var(--c-nobashi);   transform:scale(1.4); }
+        .dot.act-gairai      { background:var(--c-gairai);    box-shadow:0 0 7px var(--c-gairai);    transform:scale(1.4); }
+
+        .tap-hint { font-size:12px; color:rgba(255,255,255,0.2); letter-spacing:2px; text-align:center; margin-top:12px; }
+
+        .hidden-input {
+            position:absolute; opacity:0;
+            pointer-events:none; width:1px; height:1px;
+        }
+
+        /* はじめるオーバーレイ */
+        #start-overlay {
+            position:fixed; inset:0; z-index:200;
+            display:flex; align-items:center; justify-content:center;
+            background:rgba(15,15,26,0.82); backdrop-filter:blur(4px);
+        }
+        .btn-start-overlay {
+            border:none; border-radius:50px;
+            padding:20px 52px;
+            font-family:'Noto Sans JP',sans-serif;
+            font-size:22px; font-weight:900; letter-spacing:3px;
+            cursor:pointer;
+            background:linear-gradient(135deg,#ffd60a,#ffb700);
+            color:#0f0f1a;
+            box-shadow:0 4px 24px rgba(255,214,10,0.45);
+            transition:all 0.15s;
+        }
+        .btn-start-overlay:hover { transform:translateY(-2px); box-shadow:0 6px 32px rgba(255,214,10,0.6); }
+
+        /* ===== 結果画面 ===== */
+        .result-box { text-align:center; max-width:360px; width:100%; }
+        .result-icon { font-size:60px; margin-bottom:10px; }
+        .result-msg  { font-size:24px; font-weight:900; margin-bottom:20px; }
+        .result-stats {
+            background:var(--card); border:1px solid var(--border);
+            border-radius:12px; padding:18px; margin-bottom:24px;
+        }
+        .rs-label { font-size:11px; letter-spacing:3px; color:rgba(255,255,255,0.32); margin-bottom:4px; }
+        .rs-val {
+            font-family:'Zen Dots',cursive; font-size:46px;
+            color:var(--gold); text-shadow:0 0 20px rgba(255,214,10,0.4);
+        }
+        .result-btns { display:flex; flex-direction:column; gap:10px; }
+        .btn-res {
+            padding:15px 28px; border:none; border-radius:50px;
+            cursor:pointer; font-family:'Noto Sans JP',sans-serif;
+            font-size:16px; font-weight:900; letter-spacing:2px;
+            transition:all 0.15s;
+        }
+        .btn-res:hover { opacity:0.85; transform:translateY(-1px); }
+        .btn-retry  { background:var(--gold); color:#0f0f1a; }
+        .btn-next   { background:linear-gradient(135deg,#4cc9f0,#3a86ff); color:white; }
+        .btn-home   { background:rgba(255,255,255,0.08); color:white; border:1px solid rgba(255,255,255,0.15); }
+
+        /* ===== レスポンシブ ===== */
+        @media (max-width:380px) {
+            .title-main { font-size:34px; }
+            .btn-mode { font-size:15px; padding:14px 6px; }
+            .r-box-wide { width:38px; font-size:19px; }
+            .r-box-narrow { width:30px; font-size:15px; }
+            .select-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== タイトル ===== -->
+<div id="screen-title" class="screen active">
+    <div class="title-logo">
+        <div class="title-icon">⚔️</div>
+        <div class="title-main">
+            <span class="title-line1">50音</span>
+            <span class="title-line2">タイピング</span>
+        </div>
+        <div class="title-sub">ローマ字をうちながらおぼえよう</div>
+    </div>
+    <div class="title-btn-wrap">
+        <div class="btn-row">
+            <button class="btn-mode c-boin-btn"   onclick="selectMode('boin')">母音</button>
+            <button class="btn-mode c-gyou-btn"   onclick="selectMode('gyou')">行</button>
+            <button class="btn-mode c-dakuon-btn" onclick="selectMode('dakuon')">濁音</button>
+        </div>
+        <div class="btn-row">
+            <button class="btn-mode c-tokubetsu-btn" onclick="selectMode('tokubetsu')">特殊</button>
+            <button class="btn-mode c-nobashi-btn"   onclick="selectMode('nobashi')">のばし</button>
+            <button class="btn-mode c-gairai-btn"    onclick="selectMode('gairai')">外来語</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== 選択画面 ===== -->
+<div id="screen-select" class="screen">
+    <div class="page-header">
+        <button class="btn-back" onclick="goTo('title')">← もどる</button>
+        <span class="page-label" id="sel-label"></span>
+    </div>
+    <div class="select-heading">
+        <h2 id="sel-heading"></h2>
+        <p  id="sel-sub"></p>
+    </div>
+    <div class="select-grid" id="sel-grid"></div>
+</div>
+
+<!-- ===== ゲーム画面 ===== -->
+<div id="screen-game" class="screen">
+    <div class="game-top">
+        <button class="btn-back" onclick="quitGame()">← やめる</button>
+        <span class="game-badge" id="game-badge">母音</span>
+        <span class="game-prog"  id="game-prog">1 / 5</span>
+    </div>
+
+    <div class="char-card" id="char-card">
+        <div class="char-context" id="char-ctx">あ段</div>
+        <div class="char-emoji"   id="char-emoji"></div>
+        <div class="char-kanji"   id="char-kanji"></div>
+        <div class="char-display size-lg" id="char-disp">あ</div>
+    </div>
+
+    <div class="romaji-wrap">
+        <div class="romaji-display" id="romaji-disp"></div>
+    </div>
+
+    <div class="progress-dots" id="prog-dots"></div>
+
+    <input type="text" class="hidden-input" id="hidden-input"
+        autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+
+    <div id="start-overlay" style="display:none;">
+        <button class="btn-start-overlay" onclick="activateInput()">▶ はじめる</button>
+    </div>
+</div>
+
+<!-- ===== 結果画面 ===== -->
+<div id="screen-result" class="screen">
+    <div class="result-box">
+        <div class="result-icon">🎉</div>
+        <div class="result-msg" id="res-msg">ぜんぶできた！</div>
+        <div class="result-stats">
+            <div class="rs-label">クリアした文字数</div>
+            <div class="rs-val" id="res-count">0</div>
+            <div class="rs-label" style="margin-top:4px;">もじ</div>
+        </div>
+        <div class="result-btns">
+            <button class="btn-res btn-retry" onclick="retryGame()">🔄 もう一度</button>
+            <button class="btn-res btn-next"  id="btn-next" style="display:none;">▶ 次へ</button>
+            <button class="btn-res btn-home"  onclick="goTo('title')">🏠 ホームへ</button>
+        </div>
+    </div>
+<!-- 花火キャンバス -->
+<canvas id="fireworks-canvas"></canvas>
+
+</div>
+
+<script>
+// =====================================================
+// データ
+// =====================================================
+
+const boinData = {
+    'あ段': [{k:'あ',r:'a'},{k:'か',r:'ka'},{k:'さ',r:'sa'},{k:'た',r:'ta'},{k:'な',r:'na'},{k:'は',r:'ha'},{k:'ま',r:'ma'},{k:'や',r:'ya'},{k:'ら',r:'ra'},{k:'わ',r:'wa'}],
+    'い段': [{k:'い',r:'i'},{k:'き',r:'ki'},{k:'し',r:'shi'},{k:'ち',r:'ti'},{k:'に',r:'ni'},{k:'ひ',r:'hi'},{k:'み',r:'mi'},{k:'り',r:'ri'}],
+    'う段': [{k:'う',r:'u'},{k:'く',r:'ku'},{k:'す',r:'su'},{k:'つ',r:'tsu'},{k:'ぬ',r:'nu'},{k:'ふ',r:'fu'},{k:'む',r:'mu'},{k:'ゆ',r:'yu'},{k:'る',r:'ru'}],
+    'え段': [{k:'え',r:'e'},{k:'け',r:'ke'},{k:'せ',r:'se'},{k:'て',r:'te'},{k:'ね',r:'ne'},{k:'へ',r:'he'},{k:'め',r:'me'},{k:'れ',r:'re'}],
+    'お段': [{k:'お',r:'o'},{k:'こ',r:'ko'},{k:'そ',r:'so'},{k:'と',r:'to'},{k:'の',r:'no'},{k:'ほ',r:'ho'},{k:'も',r:'mo'},{k:'よ',r:'yo'},{k:'ろ',r:'ro'},{k:'を',r:'wo'}],
+};
+
+const gyouData = {
+    'あ行': [{k:'あ',r:'a'},{k:'い',r:'i'},{k:'う',r:'u'},{k:'え',r:'e'},{k:'お',r:'o'}],
+    'か行': [{k:'か',r:'ka'},{k:'き',r:'ki'},{k:'く',r:'ku'},{k:'け',r:'ke'},{k:'こ',r:'ko'}],
+    'さ行': [{k:'さ',r:'sa'},{k:'し',r:'shi'},{k:'す',r:'su'},{k:'せ',r:'se'},{k:'そ',r:'so'}],
+    'た行': [{k:'た',r:'ta'},{k:'ち',r:'ti'},{k:'つ',r:'tsu'},{k:'て',r:'te'},{k:'と',r:'to'}],
+    'な行': [{k:'な',r:'na'},{k:'に',r:'ni'},{k:'ぬ',r:'nu'},{k:'ね',r:'ne'},{k:'の',r:'no'}],
+    'は行': [{k:'は',r:'ha'},{k:'ひ',r:'hi'},{k:'ふ',r:'fu'},{k:'へ',r:'he'},{k:'ほ',r:'ho'}],
+    'ま行': [{k:'ま',r:'ma'},{k:'み',r:'mi'},{k:'む',r:'mu'},{k:'め',r:'me'},{k:'も',r:'mo'}],
+    'や行': [{k:'や',r:'ya'},{k:'ゆ',r:'yu'},{k:'よ',r:'yo'}],
+    'ら行': [{k:'ら',r:'ra'},{k:'り',r:'ri'},{k:'る',r:'ru'},{k:'れ',r:'re'},{k:'ろ',r:'ro'}],
+    'わ行': [{k:'わ',r:'wa'},{k:'を',r:'wo'},{k:'ん',r:'nn'}],
+};
+
+const dakuonData = {
+    'が行': [{k:'が',r:'ga'},{k:'ぎ',r:'gi'},{k:'ぐ',r:'gu'},{k:'げ',r:'ge'},{k:'ご',r:'go'}],
+    'ざ行': [{k:'ざ',r:'za'},{k:'じ',r:'ji'},{k:'ず',r:'zu'},{k:'ぜ',r:'ze'},{k:'ぞ',r:'zo'}],
+    'だ行': [{k:'だ',r:'da'},{k:'ぢ',r:'di'},{k:'づ',r:'du'},{k:'で',r:'de'},{k:'ど',r:'do'}],
+    'ば行': [{k:'ば',r:'ba'},{k:'び',r:'bi'},{k:'ぶ',r:'bu'},{k:'べ',r:'be'},{k:'ぼ',r:'bo'}],
+    'ぱ行': [{k:'ぱ',r:'pa'},{k:'ぴ',r:'pi'},{k:'ぷ',r:'pu'},{k:'ぺ',r:'pe'},{k:'ぽ',r:'po'}],
+};
+
+const tokubetsuData = {
+    'きゃ行': [{k:'きゃ',r:'kya'},{k:'きゅ',r:'kyu'},{k:'きょ',r:'kyo'}],
+    'しゃ行': [{k:'しゃ',r:'sha'},{k:'しゅ',r:'shu'},{k:'しょ',r:'sho'}],
+    'ちゃ行': [{k:'ちゃ',r:'tya'},{k:'ちゅ',r:'tyu'},{k:'ちょ',r:'tyo'}],
+    'にゃ行': [{k:'にゃ',r:'nya'},{k:'にゅ',r:'nyu'},{k:'にょ',r:'nyo'}],
+    'ひゃ行': [{k:'ひゃ',r:'hya'},{k:'ひゅ',r:'hyu'},{k:'ひょ',r:'hyo'}],
+    'みゃ行': [{k:'みゃ',r:'mya'},{k:'みゅ',r:'myu'},{k:'みょ',r:'myo'}],
+    'りゃ行': [{k:'りゃ',r:'rya'},{k:'りゅ',r:'ryu'},{k:'りょ',r:'ryo'}],
+    'ぎゃ行': [{k:'ぎゃ',r:'gya'},{k:'ぎゅ',r:'gyu'},{k:'ぎょ',r:'gyo'}],
+    'じゃ行': [{k:'じゃ',r:'ja'}, {k:'じゅ',r:'ju'}, {k:'じょ',r:'jo'}],
+    'びゃ行': [{k:'びゃ',r:'bya'},{k:'びゅ',r:'byu'},{k:'びょ',r:'byo'}],
+    'ぴゃ行': [{k:'ぴゃ',r:'pya'},{k:'ぴゅ',r:'pyu'},{k:'ぴょ',r:'pyo'}],
+    'っ（ltu）': [{k:'っ',r:'ltu'},{k:'っ',r:'ltu'},{k:'っ',r:'ltu'},{k:'っ',r:'ltu'},{k:'っ',r:'ltu'}],
+    '促音語': [
+        {k:'きって',  r:'kitte',  j:'切手'},
+        {k:'きっぷ',  r:'kippu',  j:'切符'},
+        {k:'ざっし',  r:'zasshi', j:'雑誌'},
+        {k:'もっと',  r:'motto',  j:'もっと'},
+        {k:'きっと',  r:'kitto',  j:'きっと'},
+        {k:'はっぱ',  r:'happa',  j:'葉っぱ'},
+        {k:'いっぽ',  r:'ippo',   j:'一歩'},
+        {k:'ねっこ',  r:'nekko',  j:'根っこ'},
+        {k:'いっか',  r:'ikka',   j:'一家'},
+        {k:'ざっか',  r:'zakka',  j:'雑貨'},
+        {k:'さっか',  r:'sakka',  j:'作家'},
+        {k:'いっき',  r:'ikki',   j:'一気'},
+        {k:'ろっか',  r:'rokka',  j:'ロッカー'},
+        {k:'さっさ',  r:'sassa',  j:'さっさと'},
+        {k:'ぼっち',  r:'botti',  j:'ぼっち'},
+    ],
+};
+
+const nobashiData = {
+    'ー（外来語）': [
+        {k:'らーめん',    r:'ra-menn',     j:'拉麺',         e:'🍜'},
+        {k:'かれー',      r:'kare-',       j:'カレー',       e:'🍛'},
+        {k:'じゅーす',    r:'ju-su',       j:'ジュース',     e:'🥤'},
+        {k:'けーき',      r:'ke-ki',       j:'ケーキ',       e:'🎂'},
+        {k:'ちーず',      r:'ti-zu',      j:'チーズ',       e:'🧀'},
+        {k:'すーぷ',      r:'su-pu',       j:'スープ',       e:'🍲'},
+        {k:'ぜりー',      r:'zeri-',       j:'ゼリー',       e:'🍮'},
+        {k:'そーせーじ',  r:'so-se-ji',    j:'ソーセージ',   e:'🌭'},
+        {k:'はんばーぐ',  r:'hanba-gu',    j:'ハンバーグ',   e:'🍔'},
+        {k:'ぱんけーき',  r:'panke-ki',    j:'パンケーキ',   e:'🥞'},
+        {k:'のーと',      r:'no-to',       j:'ノート',       e:'📓'},
+        {k:'しーる',      r:'shi-ru',      j:'シール',       e:'⭐'},
+        {k:'ぼーるぺん',  r:'bo-rupenn',   j:'ボールペン',   e:'🖊️'},
+        {k:'すとーぶ',    r:'suto-bu',     j:'ストーブ',     e:'🔥'},
+        {k:'そふぁー',    r:'sofa-',       j:'ソファー',     e:'🛋️'},
+        {k:'たくしー',    r:'takushi-',    j:'タクシー',     e:'🚕'},
+        {k:'えれべーたー',r:'erebe-ta-',   j:'エレベーター', e:'🛗'},
+        {k:'えすかれーたー',r:'esukare-ta-',j:'エスカレーター',e:'🏬'},
+        {k:'すーぱー',    r:'su-pa-',      j:'スーパー',     e:'🛒'},
+        {k:'でぱーと',    r:'depa-to',     j:'デパート',     e:'🏪'},
+    ],
+    'おお': [
+        {k:'おおきい',   r:'ookii',      j:'大きい',    e:'🐘'},
+        {k:'おおい',     r:'ooi',        j:'多い',      e:'⭐'},
+        {k:'おおむね',   r:'oomune',     j:'概ね',      e:'👍'},
+        {k:'こおり',     r:'koori',      j:'氷',        e:'🧊'},
+        {k:'こおろぎ',   r:'koorogi',    j:'蟋蟀',      e:'🦗'},
+        {k:'ほお',       r:'hoo',        j:'頬',        e:'😊'},
+        {k:'ほおずき',   r:'hoozuki',    j:'鬼灯',      e:'🏮'},
+        {k:'ほおじろ',   r:'hoojiro',    j:'頬白',      e:'🐦'},
+        {k:'とお',       r:'too',        j:'十',        e:'🔟'},
+        {k:'とおか',     r:'tooka',      j:'十日',      e:'📅'},
+        {k:'とおく',     r:'tooku',      j:'遠く',      e:'🌅'},
+        {k:'とおる',     r:'tooru',      j:'通る',      e:'🚶'},
+        {k:'とおし',     r:'tooshi',     j:'通し',      e:'🎫'},
+        {k:'おおかみ',   r:'ookami',     j:'狼',        e:'🐺'},
+        {k:'おおやけ',   r:'ooyake',     j:'公',        e:'🏛️'},
+        {k:'こおる',     r:'kooru',      j:'凍る',      e:'❄️'},
+        {k:'いとおしい', r:'itooshii',   j:'愛おしい',  e:'💕'},
+    ],
+    'おう': [
+        {k:'おうさま',      r:'ousama',       j:'王様',      e:'👑'},
+        {k:'おとうさん',    r:'otousann',     j:'お父さん',  e:'👨'},
+        {k:'いもうと',      r:'imouto',       j:'妹',        e:'👧'},
+        {k:'おとうと',      r:'otouto',       j:'弟',        e:'👦'},
+        {k:'きょう',        r:'kyou',         j:'今日',      e:'📆'},
+        {k:'きょうりゅう',  r:'kyouryuu',     j:'恐竜',      e:'🦕'},
+        {k:'びょういん',    r:'byouinn',      j:'病院',      e:'🏥'},
+        {k:'りょうり',      r:'ryouri',       j:'料理',      e:'🍳'},
+        {k:'がっこう',      r:'gakkou',       j:'学校',      e:'🏫'},
+        {k:'べんきょう',    r:'benkyou',      j:'勉強',      e:'📚'},
+        {k:'ひょうじょう',  r:'hyoujou',      j:'表情',      e:'😄'},
+        {k:'ほうき',        r:'houki',        j:'箒',        e:'🧹'},
+        {k:'ぼうし',        r:'boushi',       j:'帽子',      e:'🎩'},
+        {k:'ぞう',          r:'zou',          j:'象',        e:'🐘'},
+        {k:'ちょうちょ',    r:'tyoutyo',      j:'蝶々',      e:'🦋'},
+        {k:'きゅうきゅうしゃ',r:'kyuukyuusha',j:'救急車',    e:'🚑'},
+        {k:'しょうぼうしゃ',r:'shoubosha',    j:'消防車',    e:'🚒'},
+        {k:'じょうず',      r:'jouzu',        j:'上手',      e:'👏'},
+        {k:'ひょう',        r:'hyou',         j:'豹',        e:'🐆'},
+        {k:'こうえん',      r:'kouen',        j:'公園',      e:'🌳'},
+        {k:'こうじょう',    r:'koujou',       j:'工場',      e:'🏭'},
+        {k:'おしょうがつ',  r:'oshougatsu',   j:'お正月',    e:'🎍'},
+        {k:'とうもろこし',  r:'toumorokoshi', j:'玉蜀黍',    e:'🌽'},
+        {k:'ろうそく',      r:'rousoku',      j:'蝋燭',      e:'🕯️'},
+        {k:'ほうれんそう',  r:'hourensou',    j:'菠薐草',    e:'🥬'},
+        {k:'ぶどう',        r:'budou',        j:'葡萄',      e:'🍇'},
+        {k:'さとう',        r:'satou',        j:'砂糖',      e:'🍬'},
+        {k:'こんじょう',    r:'konnjou',      j:'根性',      e:'💪'},
+        {k:'ぼうけん',      r:'boukenn',      j:'冒険',      e:'🗺️'},
+        {k:'さようなら',    r:'sayounara',    j:'さようなら',e:'👋'},
+    ],
+};
+
+const gairaiData = {
+    'ヴ行': [
+        {k:'ヴァ',r:'va'},{k:'ヴィ',r:'vi'},{k:'ヴ',r:'vu'},{k:'ヴェ',r:'ve'},{k:'ヴォ',r:'vo'},
+    ],
+    'ファ行': [
+        {k:'ファ',r:'fa'},{k:'フィ',r:'fi'},{k:'フェ',r:'fe'},{k:'フォ',r:'fo'},
+    ],
+    'ティ・ディ系': [
+        {k:'ティ',r:'thi'},{k:'ディ',r:'dhi'},{k:'トゥ',r:'twu'},{k:'ドゥ',r:'dwu'},{k:'デュ',r:'dyu'},
+    ],
+    'チェ・シェ・ジェ': [
+        {k:'チェ',r:'tye'},{k:'シェ',r:'she'},{k:'ジェ',r:'je'},{k:'イェ',r:'ye'},
+    ],
+    'ウィ・ウェ・ウォ': [
+        {k:'ウィ',r:'wi'},{k:'ウェ',r:'we'},{k:'ウォ',r:'wo'},
+    ],
+};
+
+// =====================================================
+// 状態
+// =====================================================
+let currentMode  = '';
+let currentGroup = '';
+let currentGroupIndex = 0;
+let wordList   = [];
+let wordIndex  = 0;
+let typedCount = 0;
+let cleared    = 0;
+
+// =====================================================
+// 画面遷移
+// =====================================================
+function goTo(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+}
+
+// =====================================================
+// モード別グループキー取得
+// =====================================================
+function getGroupKeys(mode) {
+    if (mode === 'boin')      return Object.keys(boinData);
+    if (mode === 'gyou')      return Object.keys(gyouData);
+    if (mode === 'dakuon')    return [...Object.keys(dakuonData), 'まとめて'];
+    if (mode === 'tokubetsu') return [...Object.keys(tokubetsuData), 'まとめて'];
+    if (mode === 'nobashi')   return Object.keys(nobashiData);
+    if (mode === 'gairai')    return [...Object.keys(gairaiData), 'まとめて'];
+    return [];
+}
+
+// =====================================================
+// モード選択 → 選択画面生成
+// =====================================================
+function selectMode(mode) {
+    currentMode = mode;
+
+    const labels = {
+        boin:'母音モード', gyou:'行モード',
+        dakuon:'濁音モード', tokubetsu:'特殊モード',
+        nobashi:'のばしモード', gairai:'外来語音モード'
+    };
+    const headings = {
+        boin:'どの段を練習する？', gyou:'どの行を練習する？',
+        dakuon:'どの行を練習する？', tokubetsu:'どの行を練習する？',
+        nobashi:'どのコースを練習する？', gairai:'どのグループを練習する？'
+    };
+    const subs = {
+        boin:'同じ母音（a/i/u/e/o）でまとめて練習',
+        gyou:'同じ子音（k/s/t…）でまとめて練習',
+        dakuon:'濁音・半濁音の行ごと、またはまとめて',
+        tokubetsu:'拗音（きゃ・しゃ…）の行ごと、またはまとめて。っの入力練習も含む',
+        nobashi:'ー・おお・おう、それぞれの伸ばし方を練習',
+        gairai:'外来語特有の音（ヴ・ファ・ティ…）をグループ別、またはまとめて',
+    };
+
+    document.getElementById('sel-label').textContent   = labels[mode];
+    document.getElementById('sel-heading').textContent = headings[mode];
+    document.getElementById('sel-sub').textContent     = subs[mode];
+
+    const grid = document.getElementById('sel-grid');
+    grid.innerHTML = '';
+    grid.className = 'select-grid mode-' + mode;
+
+    const keys = getGroupKeys(mode);
+
+    keys.forEach((key, idx) => {
+        if (key === 'まとめて') {
+            const btn = document.createElement('button');
+            btn.className = 'btn-matomete';
+            btn.innerHTML = '🔀 まとめて（ランダム）';
+            btn.onclick = () => startGame(key, idx);
+            grid.appendChild(btn);
+            return;
+        }
+
+        // サブラベル・かなプレビュー
+        let subLabel = '';
+        let kanaPreview = '';
+        if (mode === 'boin') {
+            subLabel = 'DAN ' + (idx + 1);
+            const src = boinData[key];
+            kanaPreview = src.map(d => d.k).join('');
+        } else if (mode === 'gyou') {
+            subLabel = 'GYO ' + (idx + 1);
+            kanaPreview = gyouData[key].map(d => d.k).join('');
+        } else if (mode === 'dakuon') {
+            subLabel = 'ROW ' + (idx + 1);
+            kanaPreview = dakuonData[key].map(d => d.k).join('');
+        } else if (mode === 'tokubetsu') {
+            subLabel = 'ROW ' + (idx + 1);
+            kanaPreview = tokubetsuData[key].map(d => d.k).join('');
+        } else if (mode === 'nobashi') {
+            const counts = {'ー（外来語）':20,'おお':17,'おう':30};
+            subLabel = 'COURSE ' + (idx + 1);
+            kanaPreview = counts[key] + '語';
+        }
+
+        const btn = document.createElement('button');
+        btn.className = 'select-btn';
+        btn.innerHTML = `
+            <div class="sn">${subLabel}</div>
+            <div class="sm">${key}</div>
+            <div class="sk">${kanaPreview}</div>
+        `;
+        btn.onclick = () => startGame(key, idx);
+        grid.appendChild(btn);
+    });
+
+    goTo('select');
+}
+
+// =====================================================
+// ゲーム開始
+// =====================================================
+function startGame(group, groupIndex) {
+    currentGroup      = group;
+    currentGroupIndex = groupIndex;
+    wordIndex  = 0;
+    typedCount = 0;
+    cleared    = 0;
+
+    // データ取得
+    if (currentMode === 'boin')           wordList = [...boinData[group]];
+    else if (currentMode === 'gyou')      wordList = [...gyouData[group]];
+    else if (currentMode === 'dakuon') {
+        wordList = group === 'まとめて'
+            ? shuffle(Object.values(dakuonData).flat())
+            : [...dakuonData[group]];
+    } else if (currentMode === 'tokubetsu') {
+        wordList = group === 'まとめて'
+            ? shuffle(Object.values(tokubetsuData).flat())
+            : [...tokubetsuData[group]];
+    } else if (currentMode === 'nobashi') {
+        wordList = [...nobashiData[group]];
+    } else if (currentMode === 'gairai') {
+        wordList = group === 'まとめて'
+            ? shuffle(Object.values(gairaiData).flat())
+            : [...gairaiData[group]];
+    }
+
+    // バッジ
+    const badge = document.getElementById('game-badge');
+    const modeLabels = {boin:'母音',gyou:'行',dakuon:'濁音',tokubetsu:'特殊',nobashi:'のばし',gairai:'外来語'};
+    badge.textContent = modeLabels[currentMode];
+    badge.className   = 'game-badge gb-' + currentMode;
+
+    // コンテキスト
+    document.getElementById('char-ctx').textContent = group;
+
+    buildDots();
+    goTo('game');
+    loadItem();
+
+    // オーバーレイ表示（iPad対応）
+    document.getElementById('start-overlay').style.display = 'flex';
+}
+
+// =====================================================
+// アイテムロード
+// =====================================================
+function loadItem() {
+    if (wordIndex >= wordList.length) {
+        showResult();
+        return;
+    }
+
+    typedCount = 0;
+    const item = wordList[wordIndex];
+
+    // 文字サイズ自動調整
+    const disp = document.getElementById('char-disp');
+    const len  = item.k.length;
+    disp.className = 'char-display ' +
+        (len <= 2 ? 'size-lg' : len <= 4 ? 'size-md' : len <= 6 ? 'size-sm' : 'size-xs');
+    disp.textContent = item.k;
+
+    // のばし・促音語は漢字・絵文字を表示
+    const kanjiEl = document.getElementById('char-kanji');
+    const emojiEl = document.getElementById('char-emoji');
+    if (currentMode === 'nobashi' || (currentMode === 'tokubetsu' && item.j)) {
+        kanjiEl.textContent = item.j || '';
+        emojiEl.textContent = item.e || '';
+    } else {
+        kanjiEl.textContent = '';
+        emojiEl.textContent = '';
+    }
+
+    document.getElementById('game-prog').textContent =
+        `${wordIndex + 1} / ${wordList.length}`;
+
+    renderBoxes(item.r);
+    updateDots();
+}
+
+// =====================================================
+// ローマ字ボックス描画
+// =====================================================
+function renderBoxes(romaji) {
+    const wrap = document.getElementById('romaji-disp');
+    wrap.innerHTML = '';
+    // 長い単語は小さいボックスに
+    const narrow = romaji.length > 8;
+    for (let i = 0; i < romaji.length; i++) {
+        const box = document.createElement('div');
+        box.className = 'r-box ' + (narrow ? 'r-box-narrow' : 'r-box-wide') +
+            (i === 0 ? ' cur-' + currentMode : '');
+        box.textContent  = romaji[i];
+        box.dataset.idx  = i;
+        wrap.appendChild(box);
+    }
+}
+
+function getBox(idx) {
+    return document.querySelector(`#romaji-disp .r-box[data-idx="${idx}"]`);
+}
+
+// =====================================================
+// キー入力
+// =====================================================
+document.getElementById('hidden-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Backspace' || e.key.length !== 1) return;
+    const key = e.key.toLowerCase();
+    if (!/^[a-z\-]$/.test(key)) return;
+    e.preventDefault();
+    handleKey(key);
+});
+
+function handleKey(key) {
+    const romaji   = wordList[wordIndex].r;
+    const expected = romaji[typedCount];
+    const curClass = 'cur-' + currentMode;
+
+    if (key === expected) {
+        const box = getBox(typedCount);
+        if (box) { box.classList.remove(curClass, 'wrong'); box.classList.add('typed'); }
+        typedCount++;
+        const nb = getBox(typedCount);
+        if (nb) nb.classList.add(curClass);
+
+        if (typedCount >= romaji.length) {
+            cleared++;
+            const card = document.getElementById('char-card');
+            card.classList.add('pop');
+            setTimeout(() => card.classList.remove('pop'), 340);
+            // 紙吹雪！
+            spawnConfetti(card);
+            wordIndex++;
+            setTimeout(loadItem, 280);
+        }
+    } else {
+        const box = getBox(typedCount);
+        if (box) {
+            box.classList.remove('wrong');
+            void box.offsetWidth;
+            box.classList.add('wrong');
+            setTimeout(() => {
+                box.classList.remove('wrong');
+                box.classList.add(curClass);
+            }, 350);
+        }
+    }
+}
+
+// =====================================================
+// 進捗ドット
+// =====================================================
+function buildDots() {
+    const wrap = document.getElementById('prog-dots');
+    wrap.innerHTML = '';
+    wordList.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'dot';
+        d.dataset.di = i;
+        wrap.appendChild(d);
+    });
+    updateDots();
+}
+
+function updateDots() {
+    document.querySelectorAll('#prog-dots .dot').forEach((d, i) => {
+        d.className = 'dot';
+        if (i < wordIndex)   d.classList.add('done-' + currentMode);
+        if (i === wordIndex) d.classList.add('act-'  + currentMode);
+    });
+}
+
+// =====================================================
+// 開始オーバーレイ
+// =====================================================
+function activateInput() {
+    document.getElementById('start-overlay').style.display = 'none';
+    document.getElementById('hidden-input').focus();
+}
+
+// =====================================================
+// 紙吹雪エフェクト
+// =====================================================
+const CONFETTI_CHARS = ['⭐','🌟','✨','💫','🎉','🎊','⚡','🌸','💥'];
+const CONFETTI_COLORS = ['#ffd60a','#ff8c00','#4cc9f0','#4ade80','#f72585','#a855f7','#fff'];
+
+function spawnConfetti(originEl) {
+    const rect   = originEl.getBoundingClientRect();
+    const cx     = rect.left + rect.width  / 2;
+    const cy     = rect.top  + rect.height / 2;
+    const count  = 14;
+
+    for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+
+        // ランダムな方向・距離
+        const angle = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.8;
+        const dist  = 80 + Math.random() * 120;
+        const tx    = Math.cos(angle) * dist;
+        const ty    = Math.sin(angle) * dist - 60;
+        const rot   = (Math.random() - 0.5) * 720 + 'deg';
+        const dur   = (0.5 + Math.random() * 0.4) + 's';
+
+        el.style.cssText = `
+            left: ${cx}px; top: ${cy}px;
+            --tx: ${tx}px; --ty: ${ty}px;
+            --rot: ${rot}; --dur: ${dur};
+            color: ${CONFETTI_COLORS[i % CONFETTI_COLORS.length]};
+        `;
+        el.textContent = CONFETTI_CHARS[i % CONFETTI_CHARS.length];
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1000);
+    }
+}
+
+// =====================================================
+// 花火エフェクト（結果画面）
+// =====================================================
+let fwCanvas, fwCtx, fwParticles = [], fwTimer = null;
+
+function startFireworks() {
+    fwCanvas = document.getElementById('fireworks-canvas');
+    fwCanvas.width  = window.innerWidth;
+    fwCanvas.height = window.innerHeight;
+    fwCtx = fwCanvas.getContext('2d');
+    fwParticles = [];
+
+    // 5秒間花火を打ち上げる
+    let launchCount = 0;
+    const launch = () => {
+        if (launchCount >= 12) return;
+        launchFirework();
+        launchCount++;
+        setTimeout(launch, 350 + Math.random() * 400);
+    };
+    launch();
+    requestAnimationFrame(fwLoop);
+    // 5秒後にキャンバスをクリア
+    setTimeout(stopFireworks, 5000);
+}
+
+function launchFirework() {
+    const x = window.innerWidth  * (0.2 + Math.random() * 0.6);
+    const y = window.innerHeight * (0.15 + Math.random() * 0.45);
+    const hue = Math.random() * 360;
+    const count = 60 + Math.floor(Math.random() * 30);
+    for (let i = 0; i < count; i++) {
+        const angle  = (Math.PI * 2 / count) * i;
+        const speed  = 2 + Math.random() * 4;
+        fwParticles.push({
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            alpha: 1,
+            color: `hsl(${hue + Math.random() * 40},100%,60%)`,
+            size: 2 + Math.random() * 2,
+        });
+    }
+}
+
+function fwLoop() {
+    if (!fwCtx) return;
+    fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+    fwParticles = fwParticles.filter(p => p.alpha > 0.02);
+    fwParticles.forEach(p => {
+        p.x  += p.vx;
+        p.y  += p.vy;
+        p.vy += 0.08;  // 重力
+        p.vx *= 0.97;
+        p.alpha -= 0.018;
+        fwCtx.globalAlpha = p.alpha;
+        fwCtx.fillStyle   = p.color;
+        fwCtx.beginPath();
+        fwCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        fwCtx.fill();
+    });
+    fwCtx.globalAlpha = 1;
+    if (fwParticles.length > 0 || fwCanvas.style.display !== 'none') {
+        requestAnimationFrame(fwLoop);
+    }
+}
+
+function stopFireworks() {
+    setTimeout(() => {
+        if (fwCtx) fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+        fwParticles = [];
+    }, 2000);
+}
+
+// =====================================================
+// 結果
+// =====================================================
+function showResult() {
+    document.getElementById('res-msg').textContent =
+        `「${currentGroup}」ぜんぶできた！`;
+    document.getElementById('res-count').textContent = cleared;
+
+    // 次へボタン
+    const keys    = getGroupKeys(currentMode);
+    const nextIdx = currentGroupIndex + 1;
+    const nextBtn = document.getElementById('btn-next');
+    if (nextIdx < keys.length) {
+        nextBtn.style.display = 'block';
+        const nextKey = keys[nextIdx];
+        nextBtn.textContent = `▶ 次へ（${nextKey}）`;
+        nextBtn.onclick = () => startGame(nextKey, nextIdx);
+    } else {
+        nextBtn.style.display = 'none';
+    }
+
+    goTo('result');
+    startFireworks();
+}
+
+function retryGame() { startGame(currentGroup, currentGroupIndex); }
+function quitGame()  { goTo('select'); }
+
+// 結果画面 or オーバーレイ表示中にEnterで進む
+document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Enter') return;
+
+    // オーバーレイが出ているとき
+    const overlay = document.getElementById('start-overlay');
+    if (overlay && overlay.style.display !== 'none') {
+        e.preventDefault();
+        activateInput();
+        return;
+    }
+
+    // 結果画面のとき
+    if (!document.getElementById('screen-result').classList.contains('active')) return;
+    e.preventDefault();
+    const nextBtn = document.getElementById('btn-next');
+    if (nextBtn.style.display !== 'none') {
+        nextBtn.click();
+    } else {
+        retryGame();
+    }
+});
+
+// =====================================================
+// ユーティリティ
+// =====================================================
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+// タップでフォーカス維持
+['char-card','romaji-disp'].forEach(id => {
+    document.getElementById(id).addEventListener('click', () => {
+        document.getElementById('hidden-input').focus();
+    });
+});
+
+function activateInput() {
+    document.getElementById('start-overlay').style.display = 'none';
+    document.getElementById('hidden-input').focus();
+}
+
+// ゲーム画面クリックで常にフォーカス
+document.getElementById('screen-game').addEventListener('click', () => {
+    document.getElementById('hidden-input').focus();
+});
+</script>
+</body>
+</html>
