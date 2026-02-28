@@ -486,8 +486,9 @@ let currentType   = 'fill';
 let showAns       = false;
 
 // 書き込み式
-let fillFlipped   = false;  // false=通常(左固定), true=逆転(右固定)
-let fillGroupIdx  = 0;
+let fillFlipped     = false;  // false=通常, true=逆転
+let fillGroupIdx    = 0;
+let fillBlankRight  = new Set(); // 空欄パターン（右が空欄のインデックス集合）
 
 // 対義語つなぎ
 let wordGroupIdx  = 0;
@@ -506,6 +507,16 @@ function shuffle(arr) {
     [a[i],a[j]] = [a[j],a[i]];
   }
   return a;
+}
+
+// 空欄パターンをレベル・グループ変更時のみ生成する
+function generateFillPattern() {
+  const allTotal = DATA[currentLevel].length;
+  const use2col  = allTotal <= 20;
+  const total    = use2col ? allTotal : Math.min(CHUNK, allTotal - fillGroupIdx * CHUNK);
+  fillBlankRight = new Set(
+    shuffle([...Array(total).keys()]).slice(0, Math.ceil(total / 2))
+  );
 }
 function numGroups(level) {
   return Math.ceil(DATA[level].length / CHUNK);
@@ -552,7 +563,7 @@ function drawLines() {
 ════════════════════════════════ */
 function buildFill() {
   const allTotal  = DATA[currentLevel].length;
-  const use2col   = allTotal <= 20; // 20語以下なら全件2列で1枚に収める
+  const use2col   = allTotal <= 20;
   const items     = use2col ? DATA[currentLevel] : getChunk(currentLevel, fillGroupIdx);
   const total     = items.length;
   const ng        = numGroups(currentLevel);
@@ -560,9 +571,8 @@ function buildFill() {
   const startNo   = use2col ? 1 : fillGroupIdx * CHUNK + 1;
   const endNo     = startNo + total - 1;
 
-  const baseBlankRight = new Set(
-    shuffle([...Array(total).keys()]).slice(0, Math.ceil(total / 2))
-  );
+  // 空欄パターンは外部変数を使う（逆転時は再生成しない）
+  const baseBlankRight = fillBlankRight;
 
   let rows = '';
   items.forEach((d, i) => {
@@ -760,6 +770,7 @@ document.getElementById('levelTabs').addEventListener('click', e => {
   currentLevel = t.dataset.level;
   fillGroupIdx = 0; wordGroupIdx = 0; meanGroupIdx = 0; meanPage = 0;
   fillFlipped  = false;
+  generateFillPattern();
   render();
 });
 
@@ -781,7 +792,7 @@ document.getElementById('btnFlip').addEventListener('click', () => {
 // ◀ ▶ ページ切替（種類ごとに振り分け）
 document.getElementById('btnPrev').addEventListener('click', () => {
   if (currentType === 'fill') {
-    if (fillGroupIdx > 0) { fillGroupIdx--; render(); }
+    if (fillGroupIdx > 0) { fillGroupIdx--; generateFillPattern(); render(); }
   } else if (currentType === 'match-word') {
     if (wordGroupIdx > 0) { wordGroupIdx--; render(); }
   } else {
@@ -792,7 +803,7 @@ document.getElementById('btnPrev').addEventListener('click', () => {
 document.getElementById('btnNext').addEventListener('click', () => {
   const ng = numGroups(currentLevel);
   if (currentType === 'fill') {
-    if (fillGroupIdx < ng-1) { fillGroupIdx++; render(); }
+    if (fillGroupIdx < ng-1) { fillGroupIdx++; generateFillPattern(); render(); }
   } else if (currentType === 'match-word') {
     if (wordGroupIdx < ng-1) { wordGroupIdx++; render(); }
   } else {
@@ -822,6 +833,7 @@ window.addEventListener('resize', () => {
   if (showAns && currentType !== 'fill') drawLines();
 });
 
+generateFillPattern();
 render();
 </script>
 </body>
