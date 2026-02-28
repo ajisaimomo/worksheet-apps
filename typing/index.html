@@ -7,23 +7,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&family=Noto+Sans+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg:     #0f0f1a;
-            --card:   rgba(255,255,255,0.05);
-            --border: rgba(255,255,255,0.1);
-            --gold:   #ffd60a;
-            --red:    #e63946;
-            --c-boin:      #ff8c00;
-            --c-gyou:      #4cc9f0;
-            --c-dakuon:    #a855f7;
-            --c-tokubetsu: #4ade80;
-            --c-nobashi:   #f72585;
-            --c-gairai:    #00b4d8;
+            --bg:     #faf7f2;
+            --card:   rgba(255,253,248,0.92);
+            --border: rgba(180,160,120,0.22);
+            --ink:    #1c1710;
+            --ink-soft: #7a6a52;
+            --gold:   #b8892a;
+            --red:    #c45528;
+            --c-boin:      #c45528;
+            --c-gyou:      #3278a8;
+            --c-dakuon:    #7055b0;
+            --c-tokubetsu: #4a7c59;
+            --c-nobashi:   #b8892a;
+            --c-gairai:    #2e8a8a;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Noto Sans JP', sans-serif;
-            background: var(--bg);
-            color: white;
+            background: #e8e0d0;
+            color: var(--ink);
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -31,8 +33,8 @@
             content: '';
             position: fixed; inset: 0;
             background:
-                repeating-linear-gradient(90deg, rgba(255,255,255,0.013) 0,rgba(255,255,255,0.013) 1px,transparent 1px,transparent 60px),
-                repeating-linear-gradient(0deg,  rgba(255,255,255,0.013) 0,rgba(255,255,255,0.013) 1px,transparent 1px,transparent 60px);
+                radial-gradient(ellipse at 15% 30%, rgba(184,137,42,0.06) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 70%, rgba(180,150,100,0.05) 0%, transparent 50%);
             pointer-events: none; z-index: 0;
         }
 
@@ -51,17 +53,17 @@
         }
         .btn-back {
             background: transparent;
-            border: 1.5px solid rgba(255,255,255,0.2);
-            color: rgba(255,255,255,0.6);
+            border: 1.5px solid rgba(180,160,120,0.35);
+            color: var(--ink-soft);
             padding: 7px 14px; border-radius: 6px;
             cursor: pointer; font-size: 13px;
             font-family: 'Noto Sans JP', sans-serif;
             transition: all 0.15s;
         }
-        .btn-back:hover { border-color: white; color: white; }
+        .btn-back:hover { border-color: var(--gold); color: var(--ink); }
         .page-label {
             font-size: 12px; letter-spacing: 3px;
-            color: rgba(255,255,255,0.35); font-weight: 700;
+            color: var(--ink-soft); font-weight: 700; opacity: 0.6;
         }
 
         /* ===== タイトル ===== */
@@ -75,20 +77,20 @@
         }
         .title-line1 {
             display: block;
-            background: linear-gradient(90deg,#ff8c00,#ffb700);
+            background: linear-gradient(90deg,#b8892a,#d4a840);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             background-clip: text;
-            filter: drop-shadow(0 0 14px rgba(255,140,0,0.5));
+            filter: drop-shadow(0 0 10px rgba(184,137,42,0.25));
         }
         .title-line2 {
             display: block;
-            background: linear-gradient(90deg,#ff4d4d,#ff2060);
+            background: linear-gradient(90deg,#7a5a30,#b8892a);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             background-clip: text;
-            filter: drop-shadow(0 0 14px rgba(255,50,80,0.5));
+            filter: drop-shadow(0 0 10px rgba(122,90,48,0.2));
         }
         .title-sub {
-            font-size: 13px; color: rgba(255,255,255,0.38);
+            font-size: 13px; color: var(--ink-soft);
             letter-spacing: 2px; margin-top: 10px;
         }
 
@@ -109,18 +111,18 @@
         .btn-mode:active { transform: scale(0.95); }
         .btn-mode:hover { transform: translateY(-2px); }
 
-        .c-boin-btn      { background: linear-gradient(135deg,#ff8c00,#e6a817); box-shadow: 0 3px 16px rgba(255,140,0,0.4); }
-        .c-gyou-btn      { background: linear-gradient(135deg,#4cc9f0,#3a86ff); box-shadow: 0 3px 16px rgba(76,201,240,0.4); }
-        .c-dakuon-btn    { background: linear-gradient(135deg,#a855f7,#7c3aed); color: white; box-shadow: 0 3px 16px rgba(168,85,247,0.4); }
-        .c-tokubetsu-btn { background: linear-gradient(135deg,#4ade80,#16a34a); box-shadow: 0 3px 16px rgba(74,222,128,0.4); }
-        .c-nobashi-btn   { background: linear-gradient(135deg,#f72585,#b5179e); color: white; box-shadow: 0 3px 16px rgba(247,37,133,0.4); }
-        .c-gairai-btn    { background: linear-gradient(135deg,#00b4d8,#0077b6); color: white; box-shadow: 0 3px 16px rgba(0,180,216,0.4); }
+        .c-boin-btn      { background: linear-gradient(135deg,#e8856a,#d4694e); color: #fff; box-shadow: 0 3px 14px rgba(220,110,80,0.25); }
+        .c-gyou-btn      { background: linear-gradient(135deg,#6aaed4,#4e94bc); color: #fff; box-shadow: 0 3px 14px rgba(100,170,210,0.25); }
+        .c-dakuon-btn    { background: linear-gradient(135deg,#a08ad0,#8870b8); color: #fff; box-shadow: 0 3px 14px rgba(150,120,200,0.25); }
+        .c-tokubetsu-btn { background: linear-gradient(135deg,#72aa88,#5a9070); color: #fff; box-shadow: 0 3px 14px rgba(100,170,130,0.25); }
+        .c-nobashi-btn   { background: linear-gradient(135deg,#d4aa5a,#bc9240); color: #fff; box-shadow: 0 3px 14px rgba(210,170,80,0.25); }
+        .c-gairai-btn    { background: linear-gradient(135deg,#5ab0b0,#409898); color: #fff; box-shadow: 0 3px 14px rgba(80,170,170,0.25); }
 
         /* ===== 選択画面 ===== */
         #screen-select { justify-content: flex-start; padding-top: 80px; }
         .select-heading { text-align: center; margin-bottom: 20px; }
-        .select-heading h2 { font-size: 19px; font-weight: 900; margin-bottom: 4px; }
-        .select-heading p  { font-size: 12px; color: rgba(255,255,255,0.38); }
+        .select-heading h2 { font-size: 19px; font-weight: 900; margin-bottom: 4px; color: var(--ink); }
+        .select-heading p  { font-size: 12px; color: var(--ink-soft); }
 
         .select-grid {
             display: grid;
@@ -128,31 +130,32 @@
             gap: 10px; width: 100%; max-width: 460px;
         }
         .select-btn {
-            background: var(--card);
-            border: 1.5px solid var(--border);
-            border-radius: 12px; padding: 16px 14px;
+            background: #fdf9f3;
+            border: 1.5px solid #e0d5c0;
+            border-radius: 10px; padding: 16px 14px;
             cursor: pointer; transition: all 0.2s;
-            text-align: left; color: white;
+            text-align: left; color: var(--ink);
             font-family: 'Noto Sans JP', sans-serif; width: 100%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .select-btn:hover { background: rgba(255,255,255,0.09); transform: translateY(-2px); }
+        .select-btn:hover { background: #fff8ee; border-color: var(--gold); transform: translateY(-2px); }
         .sn  { font-family:'Zen Dots',cursive; font-size:10px; letter-spacing:2px; margin-bottom:8px; }
-        .sm  { font-size:20px; font-weight:900; margin-bottom:4px; }
-        .sk  { font-family:'Noto Sans Mono',monospace; font-size:11px; color:rgba(255,255,255,0.38); }
+        .sm  { font-size:20px; font-weight:900; margin-bottom:4px; color: var(--ink); }
+        .sk  { font-family:'Noto Sans Mono',monospace; font-size:11px; color: var(--ink-soft); }
 
         /* まとめてボタン（1列全幅） */
         .btn-matomete {
             grid-column: 1 / -1;
-            background: rgba(255,255,255,0.07);
-            border: 1.5px dashed rgba(255,255,255,0.2);
-            border-radius: 12px; padding: 14px;
-            cursor: pointer; color: white;
+            background: rgba(184,137,42,0.06);
+            border: 1.5px dashed #d4a840;
+            border-radius: 10px; padding: 14px;
+            cursor: pointer; color: var(--ink-soft);
             font-family:'Noto Sans JP',sans-serif;
             font-size:16px; font-weight:900;
             letter-spacing:3px; text-align:center;
             transition: all 0.2s; width:100%;
         }
-        .btn-matomete:hover { background:rgba(255,255,255,0.12); transform:translateY(-1px); }
+        .btn-matomete:hover { background:rgba(184,137,42,0.1); color: var(--ink); transform:translateY(-1px); }
 
         /* モード別ボーダー色 */
         .mode-boin      .select-btn { border-color:rgba(255,140,0,0.3); }
@@ -186,31 +189,32 @@
             letter-spacing:2px; padding:4px 12px; border-radius:20px;
             color:#0f0f1a;
         }
-        .gb-boin      { background:var(--c-boin); }
-        .gb-gyou      { background:var(--c-gyou); }
-        .gb-dakuon    { background:var(--c-dakuon); color:white; }
-        .gb-tokubetsu { background:var(--c-tokubetsu); }
-        .gb-nobashi   { background:var(--c-nobashi); color:white; }
-        .gb-gairai    { background:var(--c-gairai);  color:white; }
+        .gb-boin      { background:var(--c-boin); color:#fdf8ee; }
+        .gb-gyou      { background:var(--c-gyou); color:#fdf8ee; }
+        .gb-dakuon    { background:var(--c-dakuon); color:#fdf8ee; }
+        .gb-tokubetsu { background:var(--c-tokubetsu); color:#fdf8ee; }
+        .gb-nobashi   { background:var(--c-nobashi); color:#fdf8ee; }
+        .gb-gairai    { background:var(--c-gairai); color:#fdf8ee; }
 
         .game-prog {
             margin-left:auto;
             font-family:'Noto Sans Mono',monospace;
-            font-size:13px; color:rgba(255,255,255,0.38);
+            font-size:13px; color: var(--ink-soft);
         }
 
         /* キャラカード */
         .char-card {
-            background:var(--card);
-            border:1px solid var(--border);
-            border-radius:20px;
+            background: #fdf9f3;
+            border:1px solid #e0d5c0;
+            border-radius:16px;
             width:100%; max-width:440px;
             padding:32px 28px 24px;
             text-align:center; margin-bottom:18px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
         }
         .char-context {
             font-size:11px; letter-spacing:3px;
-            color:rgba(255,255,255,0.28); font-weight:700; margin-bottom:10px;
+            color: var(--ink-soft); font-weight:700; margin-bottom:10px;
         }
         .char-display {
             font-weight:900; line-height:1.1;
@@ -225,7 +229,7 @@
         /* のばし漢字表示 */
         .char-kanji {
             font-size: 22px;
-            color: rgba(255,255,255,0.55);
+            color: var(--ink-soft);
             letter-spacing: 3px;
             margin-bottom: 6px;
             min-height: 28px;
@@ -241,29 +245,29 @@
         }
         .r-box {
             height:52px;
-            border:2px solid rgba(255,255,255,0.12);
+            border:2px solid #e0d5c0;
             border-radius:7px;
             display:flex; align-items:center; justify-content:center;
             font-family:'Noto Sans Mono',monospace;
             font-weight:700;
-            color:rgba(255,255,255,0.15);
-            background:rgba(255,255,255,0.03);
+            color:#c8baa0;
+            background:#faf7f2;
             transition:all 0.1s;
         }
         .r-box-wide { width:44px; font-size:22px; }
         .r-box-narrow { width:36px; font-size:18px; }
 
         .r-box.typed {
-            color:white;
-            border-color:rgba(255,255,255,0.4);
-            background:rgba(255,255,255,0.07);
+            color: var(--ink);
+            border-color:#b8a888;
+            background:#fff8ee;
         }
-        .r-box.cur-boin      { border-color:var(--c-boin);      background:rgba(255,140,0,0.1);   box-shadow:0 0 10px rgba(255,140,0,0.3);   color:rgba(255,255,255,0.5); }
-        .r-box.cur-gyou      { border-color:var(--c-gyou);      background:rgba(76,201,240,0.1);  box-shadow:0 0 10px rgba(76,201,240,0.3);  color:rgba(255,255,255,0.5); }
-        .r-box.cur-dakuon    { border-color:var(--c-dakuon);    background:rgba(168,85,247,0.1);  box-shadow:0 0 10px rgba(168,85,247,0.3);  color:rgba(255,255,255,0.5); }
-        .r-box.cur-tokubetsu { border-color:var(--c-tokubetsu); background:rgba(74,222,128,0.1);  box-shadow:0 0 10px rgba(74,222,128,0.3);  color:rgba(255,255,255,0.5); }
-        .r-box.cur-nobashi   { border-color:var(--c-nobashi);   background:rgba(247,37,133,0.1);  box-shadow:0 0 10px rgba(247,37,133,0.3);  color:rgba(255,255,255,0.5); }
-        .r-box.cur-gairai    { border-color:var(--c-gairai);    background:rgba(0,180,216,0.1);   box-shadow:0 0 10px rgba(0,180,216,0.3);   color:rgba(255,255,255,0.5); }
+        .r-box.cur-boin      { border-color:var(--c-boin);      background:rgba(196,85,40,0.07);  box-shadow:0 0 8px rgba(196,85,40,0.2);  color:#c8a090; }
+        .r-box.cur-gyou      { border-color:var(--c-gyou);      background:rgba(50,120,168,0.07); box-shadow:0 0 8px rgba(50,120,168,0.2); color:#90a8c0; }
+        .r-box.cur-dakuon    { border-color:var(--c-dakuon);    background:rgba(112,85,176,0.07); box-shadow:0 0 8px rgba(112,85,176,0.2); color:#b0a0c8; }
+        .r-box.cur-tokubetsu { border-color:var(--c-tokubetsu); background:rgba(74,124,89,0.07);  box-shadow:0 0 8px rgba(74,124,89,0.2);  color:#90b098; }
+        .r-box.cur-nobashi   { border-color:var(--c-nobashi);   background:rgba(184,137,42,0.07); box-shadow:0 0 8px rgba(184,137,42,0.2); color:#c8a850; }
+        .r-box.cur-gairai    { border-color:var(--c-gairai);    background:rgba(46,138,138,0.07); box-shadow:0 0 8px rgba(46,138,138,0.2); color:#80b0b0; }
         .r-box.wrong {
             border-color:var(--red);
             background:rgba(230,57,70,0.15);
@@ -316,7 +320,7 @@
             display:flex; gap:6px; justify-content:center;
             margin-top:14px; flex-wrap:wrap; max-width:440px;
         }
-        .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.14); transition:all 0.2s; }
+        .dot { width:8px; height:8px; border-radius:50%; background:#d5c9b5; transition:all 0.2s; }
         .dot.done-boin       { background:var(--c-boin); }
         .dot.done-gyou       { background:var(--c-gyou); }
         .dot.done-dakuon     { background:var(--c-dakuon); }
@@ -330,7 +334,7 @@
         .dot.act-nobashi     { background:var(--c-nobashi);   box-shadow:0 0 7px var(--c-nobashi);   transform:scale(1.4); }
         .dot.act-gairai      { background:var(--c-gairai);    box-shadow:0 0 7px var(--c-gairai);    transform:scale(1.4); }
 
-        .tap-hint { font-size:12px; color:rgba(255,255,255,0.2); letter-spacing:2px; text-align:center; margin-top:12px; }
+        .tap-hint { font-size:12px; color: var(--ink-soft); opacity:0.5; letter-spacing:2px; text-align:center; margin-top:12px; }
 
         .hidden-input {
             position:absolute; opacity:0;
@@ -341,7 +345,7 @@
         #start-overlay {
             position:fixed; inset:0; z-index:200;
             display:flex; align-items:center; justify-content:center;
-            background:rgba(15,15,26,0.82); backdrop-filter:blur(4px);
+            background:rgba(250,247,242,0.80); backdrop-filter:blur(5px);
         }
         .btn-start-overlay {
             border:none; border-radius:50px;
@@ -349,25 +353,26 @@
             font-family:'Noto Sans JP',sans-serif;
             font-size:22px; font-weight:900; letter-spacing:3px;
             cursor:pointer;
-            background:linear-gradient(135deg,#ffd60a,#ffb700);
-            color:#0f0f1a;
-            box-shadow:0 4px 24px rgba(255,214,10,0.45);
+            background:linear-gradient(135deg,#b8892a,#d4a840);
+            color:#fdf8ee;
+            box-shadow:0 4px 24px rgba(184,137,42,0.35);
             transition:all 0.15s;
         }
-        .btn-start-overlay:hover { transform:translateY(-2px); box-shadow:0 6px 32px rgba(255,214,10,0.6); }
+        .btn-start-overlay:hover { transform:translateY(-2px); box-shadow:0 6px 32px rgba(184,137,42,0.45); }
 
         /* ===== 結果画面 ===== */
         .result-box { text-align:center; max-width:360px; width:100%; }
         .result-icon { font-size:60px; margin-bottom:10px; }
-        .result-msg  { font-size:24px; font-weight:900; margin-bottom:20px; }
+        .result-msg  { font-size:24px; font-weight:900; margin-bottom:20px; color: var(--ink); }
         .result-stats {
-            background:var(--card); border:1px solid var(--border);
+            background:#fdf9f3; border:1px solid #e0d5c0;
             border-radius:12px; padding:18px; margin-bottom:24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .rs-label { font-size:11px; letter-spacing:3px; color:rgba(255,255,255,0.32); margin-bottom:4px; }
+        .rs-label { font-size:11px; letter-spacing:3px; color: var(--ink-soft); margin-bottom:4px; }
         .rs-val {
             font-family:'Zen Dots',cursive; font-size:46px;
-            color:var(--gold); text-shadow:0 0 20px rgba(255,214,10,0.4);
+            color: var(--gold); text-shadow:0 0 16px rgba(184,137,42,0.25);
         }
         .result-btns { display:flex; flex-direction:column; gap:10px; }
         .btn-res {
@@ -377,9 +382,9 @@
             transition:all 0.15s;
         }
         .btn-res:hover { opacity:0.85; transform:translateY(-1px); }
-        .btn-retry  { background:var(--gold); color:#0f0f1a; }
-        .btn-next   { background:linear-gradient(135deg,#4cc9f0,#3a86ff); color:white; }
-        .btn-home   { background:rgba(255,255,255,0.08); color:white; border:1px solid rgba(255,255,255,0.15); }
+        .btn-retry  { background:linear-gradient(135deg,#b8892a,#d4a840); color:#fdf8ee; }
+        .btn-next   { background:linear-gradient(135deg,#3278a8,#4a90c0); color:#fdf8ee; }
+        .btn-home   { background:rgba(180,160,120,0.1); color: var(--ink); border:1px solid #e0d5c0; }
 
         /* ===== レスポンシブ ===== */
         @media (max-width:380px) {
@@ -396,12 +401,12 @@
 <!-- ===== タイトル ===== -->
 <div id="screen-title" class="screen active">
     <div class="title-logo">
-        <div class="title-icon">⚔️</div>
+        <div class="title-icon">🐈‍⬛</div>
         <div class="title-main">
             <span class="title-line1">50音</span>
             <span class="title-line2">タイピング</span>
         </div>
-        <div class="title-sub">ローマ字をうちながらおぼえよう</div>
+        <div class="title-sub">🐾 ローマ字をうちながらおぼえよう 🐾</div>
     </div>
     <div class="title-btn-wrap">
         <div class="btn-row">
